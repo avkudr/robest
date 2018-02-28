@@ -1,3 +1,5 @@
+// \author    Andrey V. Kudryavtsev
+
 #ifndef ROBUST_ESTIMATOR_H
 #define ROBUST_ESTIMATOR_H
 
