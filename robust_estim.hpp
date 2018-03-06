@@ -87,7 +87,7 @@ protected:
     EstimationProblem * problem;
     std::vector<int> bestIdxSet;
     std::vector<int> inliersIdx;
-    double inliersFraction;
+    double inliersFraction = -1.0;
 };
 
 class RANSAC : public AbstractEstimator
