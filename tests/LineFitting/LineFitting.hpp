@@ -1,20 +1,19 @@
-#include <cmath>
+/**
+ *  @brief Line fitting to a set of 2D points
+ *
+ *  @author  Andrey Kudryavtsev (avkudr.github.io)
+ *  @author  Rahima Djahel
+ *  @date    13/03/2018
+ *  @version 1.0
+ */
 
-#include<list>
-#include<vector>
 #include <cmath>
-
-#include<list>
-#include<vector>
-#include<iostream>
+#include <list>
+#include <vector>
+#include <iostream>
 
 #include"robust_estim.hpp"
-using namespace std;
 
-
-// ----------------------------------------------------------------------------
-// ------- Class defining the Problem for RobustEstimator (RANSAC)
-// ----------------------------------------------------------------------------
 struct Point2d{
     double x;
     double y;
