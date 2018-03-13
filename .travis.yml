@@ -19,7 +19,7 @@ script:
   - ./unit_tests
 
 after_success:
-  - coveralls --root .. -E ".*3rdparty.*" -E ".*CMakeFiles.*" -E ".*tests/.*.cpp.*"
+  - coveralls --root .. -E ".*3rdparty.*" -E ".*CMakeFiles.*" -E ".*tests."
 
 notifications:
   email: false
