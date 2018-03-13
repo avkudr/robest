@@ -1,12 +1,5 @@
 #include "gtest/gtest.h"
 
-#include <list>
-#include <vector>
-#include <iostream>
-#include <random>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
 #include <random>
 
 #include "robust_estim.hpp"
