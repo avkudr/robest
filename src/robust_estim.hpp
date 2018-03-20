@@ -1,4 +1,10 @@
-// \author    Andrey V. Kudryavtsev
+/**
+ *  @brief Robust estimation library
+ *
+ *  @author  Andrey Kudryavtsev (avkudr.github.io)
+ *  @date    01/03/2018
+ *  @version 1.0
+ */
 
 #ifndef ROBUST_ESTIMATOR_H
 #define ROBUST_ESTIMATOR_H
@@ -11,12 +17,14 @@
 #include <iostream>
 #include <iterator>
 
+namespace robest {
+
 class EstimationProblem{
 
 public:
     // Functions to overload in your class:
     virtual double estimErrorForSample(int i) = 0;
-    virtual double estimModelFromSamples(std::vector<int> samplesIdx) = 0;
+    virtual   void estimModelFromSamples(std::vector<int> samplesIdx) = 0;
     virtual    int getTotalNbSamples() const = 0;
 
     int getNbParams()     const{return nbParams;}
@@ -177,4 +185,5 @@ private:
     double med;
 };
 
+}
 #endif // ROBUST_ESTIMATOR_H

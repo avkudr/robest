@@ -4,6 +4,8 @@ project(robest CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
     set(CMAKE_CXX_FLAGS         "-Wall -Wno-unknown-pragmas -Wno-sign-compare -Woverloaded-virtual -Wwrite-strings -Wno-unused")
     set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g3")
@@ -40,8 +42,11 @@ add_executable(
     unit_tests
     tests/main.cpp
     tests/test_LineFitting.cpp
+    tests/test_CircleFitting.cpp
     tests/LineFitting/LineFitting.cpp
     tests/LineFitting/LineFitting.hpp
+    tests/CircleFitting/CircleFitting.cpp
+    tests/CircleFitting/CircleFitting.hpp
 )
 
 add_dependencies(unit_tests googletest)

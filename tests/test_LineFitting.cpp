@@ -2,10 +2,9 @@
 
 #include <random>
 
-#include "robust_estim.hpp"
 #include "LineFitting/LineFitting.hpp"
 
-void generateData(
+void generateLineData(
         const double k,
         const double b,
         const double noiseVar,
@@ -37,14 +36,14 @@ TEST(LineFitting, idealCase)
     double k = 1.0;
     double b = 2.5;
     double noise = 0;
-    generateData(k,b,noise,x,y);
+    generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
     LineFittingProblem * lineFitting = new LineFittingProblem();
     lineFitting->setData(x,y);
 
     // Solve
-    RANSAC * ransacSolver = new RANSAC();
+    robest::RANSAC * ransacSolver = new robest::RANSAC();
     ransacSolver->solve(lineFitting);
 
     // Get result
@@ -64,14 +63,14 @@ TEST(LineFitting, idealCase2)
     double k = 0.7658;
     double b = 4.4785;
     double noise = 0;
-    generateData(k,b,noise,x,y);
+    generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
     LineFittingProblem * lineFitting = new LineFittingProblem();
     lineFitting->setData(x,y);
 
     // Solve
-    RANSAC * ransacSolver = new RANSAC();
+    robest::RANSAC * ransacSolver = new robest::RANSAC();
     ransacSolver->solve(lineFitting);
 
     // Get result
@@ -91,14 +90,14 @@ TEST(LineFitting, smallNoise)
     double k = 1.0;
     double b = 2.5;
     double noise = 0.001;
-    generateData(k,b,noise,x,y);
+    generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
     LineFittingProblem * lineFitting = new LineFittingProblem();
     lineFitting->setData(x,y);
 
     // Solve
-    RANSAC * ransacSolver = new RANSAC();
+    robest::RANSAC * ransacSolver = new robest::RANSAC();
     ransacSolver->solve(lineFitting);
 
     // Get result
@@ -123,8 +122,10 @@ TEST(LineFitting, outliers)
     lineFitting->setData(x,y);
 
     // Solve
-    RANSAC * ransacSolver = new RANSAC();
-    ransacSolver->solve(lineFitting);
+    double thres = 0.001;
+    int nbIter = 20;
+    robest::RANSAC * ransacSolver = new robest::RANSAC();
+    ransacSolver->solve(lineFitting, thres, nbIter);
 
     // Get result
     double res_k,res_b;
@@ -148,7 +149,7 @@ TEST(LineFitting, almostHalfOutlier)
     lineFitting->setData(x,y);
 
     // Solve
-    RANSAC * ransacSolver = new RANSAC();
+    robest::RANSAC * ransacSolver = new robest::RANSAC();
     ransacSolver->solve(lineFitting);
 
     // Get result

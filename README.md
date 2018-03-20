@@ -3,3 +3,9 @@
 
 # robest
 C++ library of robust estimators (RANSAC, LMedS, etc).
+
+# install
+
+```
+git clone --recursive https://github.com/avkudr/robest.git
+```

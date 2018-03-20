@@ -3,16 +3,18 @@
  *
  *  @author  Andrey Kudryavtsev (avkudr.github.io)
  *  @author  Rahima Djahel (github:rahma24000)
- *  @date    13/03/2018
+ *  @date    20/03/2018
  *  @version 1.0
  */
 
-#include <cmath>
 #include <list>
 #include <vector>
+#include <cmath>
 #include <iostream>
 
 #include "robust_estim.hpp"
+
+using namespace std;
 
 struct Point2d{
     double x;
@@ -21,11 +23,11 @@ struct Point2d{
 
 typedef std::vector<Point2d> Point2Dvector;
 
-class LineFittingProblem : public robest::EstimationProblem{
+class CircleFittingProblem : public robest::EstimationProblem{
 
 public:
-    LineFittingProblem();
-    ~LineFittingProblem();
+    CircleFittingProblem();
+    ~CircleFittingProblem();
 
     void setData(std::vector<double> & x, std::vector<double> & y);
 
@@ -36,14 +38,18 @@ public:
         return (int) points.size();
     }
 
-    void getResult(double & resa, double & resb){
-        resa = this->a;
-        resb = this->b;
+    void getResult(double & res_cx, double & res_cy, double & res_r) const{
+        res_cx = this->cx;
+        res_cy = this->cy;
+        res_r  = this->r;
     }
 
-private:
-    Point2Dvector points; // Data
-    double a;
-    double b;
+    bool isDegenerate(std::vector<int> samplesIdx);
 
+private:
+
+    Point2Dvector points; // input data
+    double cx;
+    double cy;
+    double r; //radius
 };
