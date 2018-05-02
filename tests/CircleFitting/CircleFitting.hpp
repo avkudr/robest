@@ -14,8 +14,6 @@
 
 #include "robust_estim.hpp"
 
-using namespace std;
-
 struct Point2d{
     double x;
     double y;
