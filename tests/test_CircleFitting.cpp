@@ -27,7 +27,7 @@ void generateCircleData(
         }
     }
 }
-/*
+
 TEST(CircleFitting, idealCase)
 {
     std::vector<double> x;
@@ -149,4 +149,3 @@ TEST(CircleFitting, isDegenerate)
     circleFitting->setData(x3,y3);
     ASSERT_TRUE(!circleFitting->isDegenerate({0,1,2}));
 }
-*/

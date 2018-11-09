@@ -26,7 +26,7 @@ void generateLineData(
         }
     }
 }
-/*
+
 TEST(LineFitting, idealCase)
 {
     // Generate data
@@ -160,6 +160,7 @@ TEST(LineFitting, almostHalfOutlier)
     ASSERT_NEAR(b,res_b, 1.0e-11);
 
 }
+
 //============================================================================================================================================================================
 TEST(LineFitting, idealCaseMSAC)
 {
@@ -185,64 +186,3 @@ TEST(LineFitting, idealCaseMSAC)
     ASSERT_NEAR(k,res_k, 1.0e-11);
     ASSERT_NEAR(b,res_b, 1.0e-11);
 }
-
-
-// TEST(LineFitting, Rdata)
-// {
-//     // Generate data
-//     // y = k*x + b
-//     std::vector<double> x = {2,3,4,6.1,8.3,10,12,13.6,16,18,20,22};
-//     std::vector<double> y = {4,4.5,5.9,6.6,8,9,10,11.1,12.8,14,15.1,16};
-//     double k = 0.62;
-//     double b = 3;
-
-//     // Define estimation problem
-//     LineFittingProblem * lineFitting = new LineFittingProblem();
-//     lineFitting->setData(x,y);
-
-//     // Solve
-//     robest::RANSAC * ransacSolver = new robest::RANSAC();
-//     ransacSolver->solve(lineFitting,0.1,1000);
-
-//     // Get result
-//     double res_k,res_b;
-//     lineFitting->getResult(res_k,res_b);
-//     std::cout << res_k << std::endl;
-//     std::cout << res_b << std::endl;
-//     std::cout << ' ' << std::endl;
-
-//     //ASSERT_NEAR(k,res_k, 1.0e-11);
-//     //ASSERT_NEAR(b,res_b, 1.0e-11);
-
-// }
-
-// TEST(LineFitting, Mdata)
-// {
-//     // Generate data
-//     // y = k*x + b
-//     std::vector<double> x = {2,3,4,6.1,8.3,10,12,13.6,16,18,20,22};
-//     std::vector<double> y = {4,4.5,5.9,6.6,8,9,10,11.1,12.8,14,15.1,16};
-//     double k = 0.62;
-//     double b = 3;
-
-//     // Define estimation problem
-//     LineFittingProblem * lineFitting = new LineFittingProblem();
-//     lineFitting->setData(x,y);
-
-//     // Solve
-//     robest::MSAC * ransacSolver = new robest::MSAC();
-//     ransacSolver->solve(lineFitting,0.1,1000);
-
-//     // Get result
-//     double res_k,res_b;
-//     lineFitting->getResult(res_k,res_b);
-//     std::cout << ' ' << std::endl;
-//     std::cout << res_k << std::endl;
-//     std::cout << res_b << std::endl;
-
-    
-//     //ASSERT_NEAR(k,res_k, 1.0e-11);
-//     //ASSERT_NEAR(b,res_b, 1.0e-11);
-
-// }
-*/
