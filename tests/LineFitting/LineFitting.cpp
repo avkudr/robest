@@ -22,14 +22,14 @@ void LineFittingProblem::setData(std::vector<double> & x, std::vector<double> & 
     }
 }
 
-double LineFittingProblem::estimErrorForSample(int i)
+inline double LineFittingProblem::estimErrorForSample(int i)
 {
     //distance point to line
     Point2d & p = points[i];
     return std::fabs(a*p.x - p.y + b) / sqrt(a*a + 1); // distance line-point
 }
 
-void LineFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
+inline void LineFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
 {
     //line from two points
     Point2d & P = points[samplesIdx[0]];

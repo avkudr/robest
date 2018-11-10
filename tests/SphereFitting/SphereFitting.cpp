@@ -70,7 +70,7 @@ void SphereFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
     } 
 }
 
-double SphereFittingProblem::determinant(std::vector<int> samplesIdx)
+inline double SphereFittingProblem::determinant(std::vector<int> samplesIdx)
 {
     const Point3Dvector & P = this->points;
 
