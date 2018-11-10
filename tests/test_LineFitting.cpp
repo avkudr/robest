@@ -162,7 +162,7 @@ TEST(LineFitting, almostHalfOutlier)
 }
 
 //============================================================================================================================================================================
-TEST(LineFitting, idealCaseMSAC)
+TEST(LineFitting, noiseCaseMSAC)
 {
     // Generate data
     // y = k*x + b

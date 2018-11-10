@@ -1,8 +1,9 @@
 /**
  *  @brief Sphere fitting to a set of 3D points
  *
- *  @author  Mark Anisimov
- *  @date    13/03/2018
+ *  @author  Andrey Kudryavtsev (avkudr.github.io)
+ *  @author  Mark Anisimov (github:qM4RCp)
+ *  @date    10/11/2018
  *  @version 1.0
  */
 

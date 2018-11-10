@@ -35,10 +35,9 @@ void SphereFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
     const auto & y1 = P[samplesIdx[0]].y, y2 = P[samplesIdx[1]].y, y3 = P[samplesIdx[2]].y, y4 = P[samplesIdx[3]].y;
     const auto & z1 = P[samplesIdx[0]].z, z2 = P[samplesIdx[1]].z, z3 = P[samplesIdx[2]].z, z4 = P[samplesIdx[3]].z;
 
-    
     double D = this->determinant(samplesIdx);
 
-    if (!(D < 1e-3 ))
+    if (!(D < 1e-3))
     {    
         double f1 = (std::pow(x1,2)+std::pow(y1,2)+std::pow(z1,2));
         double f2 = (std::pow(x2,2)+std::pow(y2,2)+std::pow(z2,2));
@@ -79,8 +78,8 @@ double SphereFittingProblem::determinant(std::vector<int> samplesIdx)
     const auto & y1 = P[samplesIdx[0]].y, y2 = P[samplesIdx[1]].y, y3 = P[samplesIdx[2]].y, y4 = P[samplesIdx[3]].y;
     const auto & z1 = P[samplesIdx[0]].z, z2 = P[samplesIdx[1]].z, z3 = P[samplesIdx[2]].z, z4 = P[samplesIdx[3]].z;
     
-    return 8*(x1*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3))\
-            + x2*(y1*(z4 - z3) + y3*(z1 - z4) + y4*(z3 - z1))\
-            + x3*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2))\
-            + x4*(y1*(z3 - z2) + y2*(z1 - z3) + y3*(z2 - z1)));
+    return  8*(x1*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3))\
+             + x2*(y1*(z4 - z3) + y3*(z1 - z4) + y4*(z3 - z1))\
+             + x3*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2))\
+             + x4*(y1*(z3 - z2) + y2*(z1 - z3) + y3*(z2 - z1)));
 }

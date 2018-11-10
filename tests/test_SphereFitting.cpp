@@ -34,6 +34,10 @@ void generateSphereData(
 
 TEST(SphereFitting, idealCase)
 {
+    // Define estimation problem
+    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+
+    // Define dataset
     std::vector<double> x = {0,  2,  0,   0};
     std::vector<double> y = {0,  0,  2,   0};
     std::vector<double> z = {2,  0,  0,  -2};
@@ -44,12 +48,13 @@ TEST(SphereFitting, idealCase)
     double radius = 2; //sphere radius
     double noiseVar = 0.0;
 
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
     sphereFitting->setData(x,y,z);
 
+    // Solver init
     robest::MSAC * MSACsolver = new robest::MSAC();
     MSACsolver->solve(sphereFitting);
 
+    // Get results
     double res_cx,res_cy, res_cz,res_r;
     sphereFitting->getResult(res_cx, res_cy, res_cz, res_r);
 
@@ -61,6 +66,10 @@ TEST(SphereFitting, idealCase)
 
 TEST(SphereFitting, idealCase2)
 {
+    // Define estimation problem
+    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+
+    // Define dataset
     std::vector<double> x = {8,     12,     4,      8,      8,      8};
     std::vector<double> y = {10,    6,      6,      2,      6,      6};
     std::vector<double> z = {-11,   -11,    -11,    -11,    -15,    -7};
@@ -71,22 +80,16 @@ TEST(SphereFitting, idealCase2)
     double radius = 4; //sphere radius
     double noiseVar = 0.0;
 
-    //generateSphereData(cx,cy,cz,radius,noiseVar,x,y,z);
-
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
     sphereFitting->setData(x,y,z);
 
+    // Solver init
     robest::MSAC * MSACsolver = new robest::MSAC();
     MSACsolver->solve(sphereFitting);
 
+    // Get results
     double res_cx,res_cy, res_cz,res_r;
     sphereFitting->getResult(res_cx, res_cy, res_cz, res_r);
-    /*
-    std::cout << std::endl;
-    std::cout << "Estimated centre of shpere: cx = " << res_cx << ", cy = " << res_cy << ", cz = " << res_cz << std::endl;
-    std::cout << "Estimated radius of shpere: r = " << res_r  << std::endl;
-    std::cout << std::endl;
-    */
+     
     ASSERT_NEAR(    cx, res_cx, 1.0e-11);
     ASSERT_NEAR(    cy, res_cy, 1.0e-11);
     ASSERT_NEAR(    cz, res_cz, 1.0e-11);
@@ -95,6 +98,9 @@ TEST(SphereFitting, idealCase2)
 
 TEST(SphereFitting, smallNoise)
 {
+    // Define estimation problem
+    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+
     std::vector<double> x;
     std::vector<double> y;
     std::vector<double> z;
@@ -105,22 +111,19 @@ TEST(SphereFitting, smallNoise)
     double radius = 4.54854; //sphere radius
     double noiseVar = 0.001;
 
+    // generate dataset
     generateSphereData(cx,cy,cz,radius,noiseVar,x,y,z);
 
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
     sphereFitting->setData(x,y,z);
 
+    // Solver init
     robest::MSAC * MSACsolver = new robest::MSAC();
     MSACsolver->solve(sphereFitting);
 
+    // Get results
     double res_cx,res_cy, res_cz,res_r;
     sphereFitting->getResult(res_cx, res_cy, res_cz, res_r);
-    /*
-    std::cout << std::endl;
-    std::cout << "Estimated centre of shpere: cx = " << res_cx << ", cy = " << res_cy << ", cz = " << res_cz << std::endl;
-    std::cout << "Estimated radius of shpere: r = " << res_r  << std::endl;
-    std::cout << std::endl;
-    */
+     
     ASSERT_NEAR(    cx, res_cx, 1.0e-3);
     ASSERT_NEAR(    cy, res_cy, 1.0e-3);
     ASSERT_NEAR(    cz, res_cz, 1.0e-3);
@@ -129,6 +132,10 @@ TEST(SphereFitting, smallNoise)
 
 TEST(SphereFitting, outliers)
 {
+    // Define estimation problem
+    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+
+    // Define dataset
     std::vector<double> x = {3, 8,  -2, 3,  3,  3,  16, -24, 0};
     std::vector<double> y = {3, -2, -2, -7, -2, -2, 12, 16, -15, 0};
     std::vector<double> z = {7, 7,  7,  7,  2,  12, -2, 3,  0};
@@ -138,22 +145,45 @@ TEST(SphereFitting, outliers)
     double cz = 7;
     double radius = 5; //sphere radius;
 
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
     sphereFitting->setData(x,y,z);
 
+    // Solver init
     robest::MSAC * MSACsolver = new robest::MSAC();
     MSACsolver->solve(sphereFitting);
 
+    // Get results
     double res_cx,res_cy, res_cz,res_r;
     sphereFitting->getResult(res_cx, res_cy, res_cz, res_r);
-    /*
-    std::cout << std::endl;
-    std::cout << "Estimated centre of shpere: cx = " << res_cx << ", cy = " << res_cy << ", cz = " << res_cz << std::endl;
-    std::cout << "Estimated radius of shpere: r = " << res_r  << std::endl;
-    std::cout << std::endl;
-    */
+     
     ASSERT_NEAR(    cx, res_cx, 1.0e-3);
     ASSERT_NEAR(    cy, res_cy, 1.0e-3);
     ASSERT_NEAR(    cz, res_cz, 1.0e-3);
     ASSERT_NEAR(radius,  res_r, 1.0e-3);
+}
+
+TEST(SphereFitting, isDegenerate)
+{
+    // Define estimation problem
+    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+
+    //sample 1
+    std::vector<double> x1 = {0,1,2,3};
+    std::vector<double> y1 = {0,1,2,3};
+    std::vector<double> z1 = {0,1,2,3};
+    sphereFitting->setData(x1,y1,z1);
+    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
+    
+    //sample 2
+    std::vector<double> x2 = {0,1,2,3};
+    std::vector<double> y2 = {0,1.001,2};
+    std::vector<double> z2 = {0,1,2,0.001};
+    sphereFitting->setData(x2,y2,z2);
+    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
+
+    //sample 3
+    std::vector<double> x3 = {0,1,5,7};
+    std::vector<double> y3 = {0,1,2,4};
+    std::vector<double> z3 = {0,1,1,2};
+    sphereFitting->setData(x3,y3,z3);
+    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
 }

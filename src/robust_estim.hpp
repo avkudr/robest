@@ -2,6 +2,7 @@
  *  @brief Robust estimation library
  *
  *  @author  Andrey Kudryavtsev (avkudr.github.io)
+ *  @author  Mark Anisimov (github:qM4RCp)
  *  @date    01/03/2018
  *  @version 1.0
  */
