@@ -46,7 +46,8 @@ inline void CircleFittingProblem::estimModelFromSamples(std::vector<int> samples
         r = sqrt((P.x - cx)*(P.x - cx)+(P.y - cy)*(P.y - cy));
     }
 }
-inline bool CircleFittingProblem::isDegenerate(std::vector<int> samplesIdx)
+
+inline bool CircleFittingProblem::isDegenerate(const std::vector<int> & samplesIdx)
 {
     Point2d & P = points[samplesIdx[0]];
     Point2d & V = points[samplesIdx[1]];

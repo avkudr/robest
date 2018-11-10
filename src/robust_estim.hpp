@@ -17,18 +17,18 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <limits>
 
 namespace robest
 {
 
 class EstimationProblem
 {
-
   public:
     // Functions to overload in your class:
     virtual double estimErrorForSample(int i) = 0;
-    virtual void estimModelFromSamples(std::vector<int> samplesIdx) = 0;
-    virtual int getTotalNbSamples() const = 0;
+    virtual void   estimModelFromSamples(std::vector<int> samplesIdx) = 0;
+    virtual int    getTotalNbSamples() const = 0;
 
     int getNbParams() const { return nbParams; }
     int getNbMinSamples() const { return nbMinSamples; }
@@ -44,7 +44,6 @@ class EstimationProblem
 
 static std::random_device rd;  // random device engine, usually based on /dev/random on UNIX-like systems
 static std::mt19937 rng(rd()); // initialize Mersennes' twister using rd to generate the seed
-//static std::mt19937 rng((unsigned int) - 1);
 
 // Base class for Robust Estimators
 class AbstractEstimator
@@ -73,14 +72,11 @@ class AbstractEstimator
 
         //take last <minNbSamples> elements
         std::vector<int> idx(allIdx.end() - minNbSamples, allIdx.end());
-        //        std::cout << "[";
-        //        for (auto i : idx) std::cout << i << ", ";
-        //        std::cout << "]\n";
 
         return idx;
     }
 
-    int estimOfIter(int dataSize, float alpha = 0.99, float gamma = 0.60)
+    int estimateNbIter(int dataSize, float alpha = 0.99, float gamma = 0.60)
     {
         return (std::log(alpha)) / (std::log(1 - std::pow(gamma, dataSize)));
     }
@@ -160,7 +156,7 @@ class MSAC : public AbstractEstimator
   public:
     MSAC()
     {
-        sumSqErr = 1000000000.0;
+        sumSqErr = std::numeric_limits<double>::max();
     }
 
     void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = 10000)
@@ -171,9 +167,8 @@ class MSAC : public AbstractEstimator
 
         if (nbIter == 0)
         {
-            nbIter = this->estimOfIter(totalNbSamples);
-            std::cout << std::endl;
-            std::cout << nbIter << std::endl;
+            nbIter = this->estimateNbIter(totalNbSamples);
+            std::cout << "Automatically calculated number of iterations: " << nbIter << std::endl;
         }
 
         for (int i = 0; i < nbIter; i++)
@@ -181,7 +176,6 @@ class MSAC : public AbstractEstimator
             std::vector<int> indices = randomSampleIdx();
             problem->estimModelFromSamples(indices);
 
-            //getInliersNb
             double sumSqErr = 0;
             int nbInliers = 0;
             for (int j = 0; j < totalNbSamples; j++)
@@ -199,7 +193,7 @@ class MSAC : public AbstractEstimator
             }
 
             double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
-            //if (sumSqErr < this->sumSqErr && inliersFraction > this->inliersFraction)
+
             if (sumSqErr < this->sumSqErr )
             {
                 this->inliersFraction = inliersFraction;
@@ -215,68 +209,7 @@ class MSAC : public AbstractEstimator
   private:
     double sumSqErr;
 };
-/*
-class MLESAC : public AbstractEstimator
-{
-  public:
-    MLESAC()
-    {
-        
-    }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = 10000, double Sigma, int nEMIter)
-    {
-        problem = pb;
-
-        int totalNbSamples = problem->getTotalNbSamples();
-
-        if (nbIter == 0)
-        {
-            nbIter = this->estimOfIter(totalNbSamples);
-            std::cout << std::endl;
-            std::cout << nbIter << std::endl;
-        }
-
-        for (int i = 0; i < nbIter; i++)
-        {
-            std::vector<int> indices = randomSampleIdx();
-            problem->estimModelFromSamples(indices);
-
-            for (int j = 0; j < totalNbSamples; j++)
-            {
-                double error = problem->estimErrorForSample(j);
-                
-                dMix = 0.5;
-                
-                for (int  j = 0; j > nEMIter; j++)
-                {
-                    dErrorInlierProb = dMix * exp(-std::pow(error,2)/(2*std::pow(Sigma,2)))/(Sigma * std::sqrt(2 * 3.1415));
-                    dErrorOutlierProb = (1 - dMix) / v;
-                }
-            }
-
-            double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
-            //if (sumSqErr < this->sumSqErr && inliersFraction > this->inliersFraction)
-            if (sumSqErr < this->sumSqErr )
-            {
-                this->inliersFraction = inliersFraction;
-                this->sumSqErr = sumSqErr;
-                this->bestIdxSet = indices;
-            }
-        }
-        
-        problem->estimModelFromSamples(bestIdxSet);
-        getInliers(thres);
-        //problem->estimModelFromSamples(inliersIdx);
-    }
-  private:
-    double dMix;
-    double dErrorInlierProb;
-    double dErrorOutlierProb;
-    double dInlierProb;
-    double v;
-};
-*/
 class LMedS : public AbstractEstimator
 {
   public:

@@ -44,12 +44,12 @@ add_executable(
     tests/test_LineFitting.cpp
     tests/test_CircleFitting.cpp
     tests/test_SphereFitting.cpp
-    tests/LineFitting/LineFitting.cpp
     tests/LineFitting/LineFitting.hpp
-    tests/CircleFitting/CircleFitting.cpp
+    tests/LineFitting/LineFitting.cpp
     tests/CircleFitting/CircleFitting.hpp
-    tests/SphereFitting/SphereFitting.cpp
+    tests/CircleFitting/CircleFitting.cpp
     tests/SphereFitting/SphereFitting.hpp
+    tests/SphereFitting/SphereFitting.cpp
 )
 
 add_dependencies(unit_tests googletest)

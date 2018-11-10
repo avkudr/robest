@@ -33,8 +33,6 @@ public:
     double estimErrorForSample(int i);
     void   estimModelFromSamples(std::vector<int> samplesIdx);
 
-    double determinant(std::vector<int> samplesIdx);
-
     int getTotalNbSamples() const{
         return (int) points.size();
     }
@@ -46,7 +44,11 @@ public:
         res_r  = this->r;
     }
 
+    bool isDegenerate(const std::vector<int> & samplesIdx);
+
 private:
+    double determinantFromDataPoints(const std::vector<int> & samplesIdx);
+
     Point3Dvector points;
     double cx;
     double cy;

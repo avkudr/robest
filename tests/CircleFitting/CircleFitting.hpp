@@ -42,7 +42,7 @@ public:
         res_r  = this->r;
     }
 
-    bool isDegenerate(std::vector<int> samplesIdx);
+    bool isDegenerate(const std::vector<int> & samplesIdx);
 
 private:
 

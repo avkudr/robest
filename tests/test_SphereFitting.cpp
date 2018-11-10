@@ -4,7 +4,7 @@
 
 #include "SphereFitting/SphereFitting.hpp"
 
-//gaussian noise generation
+// generate data with gaussian noise (optional)
 void generateSphereData(
         const double cx,
         const double cy,
@@ -70,14 +70,14 @@ TEST(SphereFitting, idealCase2)
     SphereFittingProblem * sphereFitting = new SphereFittingProblem();
 
     // Define dataset
-    std::vector<double> x = {8,     12,     4,      8,      8,      8};
-    std::vector<double> y = {10,    6,      6,      2,      6,      6};
-    std::vector<double> z = {-11,   -11,    -11,    -11,    -15,    -7};
+    std::vector<double> x = {   8,   12,     4,     8,     8,     8};
+    std::vector<double> y = {  10,    6,     6,     2,     6,     6};
+    std::vector<double> z = { -11,  -11,   -11,   -11,   -15,    -7};
 
-    double cx = 8; // sphere center C:(cx,cy,cz)
-    double cy = 6;
-    double cz = -11;
-    double radius = 4; //sphere radius
+    double cx = 8.0; // sphere center C:(cx,cy,cz)
+    double cy = 6.0;
+    double cz = -11.0;
+    double radius = 4.0; //sphere radius
     double noiseVar = 0.0;
 
     sphereFitting->setData(x,y,z);
@@ -171,19 +171,33 @@ TEST(SphereFitting, isDegenerate)
     std::vector<double> y1 = {0,1,2,3};
     std::vector<double> z1 = {0,1,2,3};
     sphereFitting->setData(x1,y1,z1);
-    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
+    ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
     
     //sample 2
     std::vector<double> x2 = {0,1,2,3};
     std::vector<double> y2 = {0,1.001,2};
     std::vector<double> z2 = {0,1,2,0.001};
     sphereFitting->setData(x2,y2,z2);
-    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
+    ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
 
     //sample 3
     std::vector<double> x3 = {0,1,5,7};
     std::vector<double> y3 = {0,1,2,4};
     std::vector<double> z3 = {0,1,1,2};
     sphereFitting->setData(x3,y3,z3);
-    ASSERT_TRUE((sphereFitting->determinant({0,1,2,3}) < 1e-3));
+    ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
+
+    //sample 4
+    std::vector<double> x4 = {0,  1,  0,   0};
+    std::vector<double> y4 = {0,  0,  1,   0};
+    std::vector<double> z4 = {1,  0,  0,  -1};
+    sphereFitting->setData(x4,y4,z4);
+    ASSERT_TRUE(!sphereFitting->isDegenerate({0,1,2,3}));
+
+    //sample 5
+    std::vector<double> x5 = {0.0,  0.0,  1.0,   0.0};
+    std::vector<double> y5 = {0.0,  1.0,  0.0,   0.0};
+    std::vector<double> z5 = {1.0,  0.0,  0.0,  -1.0};
+    sphereFitting->setData(x5,y5,z5);
+    ASSERT_TRUE(!sphereFitting->isDegenerate({0,1,2,3}));
 }
