@@ -21,13 +21,13 @@ void SphereFittingProblem::setData(std::vector<double> & x, std::vector<double> 
     }
 }
 
-double SphereFittingProblem::estimErrorForSample(int i)
+inline double SphereFittingProblem::estimErrorForSample(int i)
 {
     const Point3d & p = this->points[i];
     return std::fabs(std::sqrt(std::pow((p.x - this->cx),2)+ std::pow((p.y - this->cy),2) + std::pow((this->cz - p.z),2)) - this->r);
 }
 
-void SphereFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
+inline void SphereFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
 {
     const Point3Dvector & P = this->points;
 
