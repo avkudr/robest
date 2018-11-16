@@ -37,12 +37,12 @@ inline void SphereFittingProblem::estimModelFromSamples(std::vector<int> samples
 
     double D = this->determinantFromDataPoints(samplesIdx);
 
-    if (!(D < 1e-3)) // equivalent of isDegenerate
+    if (!(std::fabs(D) < 1e-3)) // equivalent of isDegenerate
     {    
-        double f1 = (std::pow(x1,2)+std::pow(y1,2)+std::pow(z1,2));
-        double f2 = (std::pow(x2,2)+std::pow(y2,2)+std::pow(z2,2));
-        double f3 = (std::pow(x3,2)+std::pow(y3,2)+std::pow(z3,2));
-        double f4 = (std::pow(x4,2)+std::pow(y4,2)+std::pow(z4,2));
+        double f1 = std::pow(x1,2)+std::pow(y1,2)+std::pow(z1,2);
+        double f2 = std::pow(x2,2)+std::pow(y2,2)+std::pow(z2,2);
+        double f3 = std::pow(x3,2)+std::pow(y3,2)+std::pow(z3,2);
+        double f4 = std::pow(x4,2)+std::pow(y4,2)+std::pow(z4,2);
 
         //calculation of the centre of the sphere
         this->cx = (f3*(4*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2)))\
@@ -86,5 +86,5 @@ inline double SphereFittingProblem::determinantFromDataPoints(const std::vector<
 
 bool SphereFittingProblem::isDegenerate(const std::vector<int> & samplesIdx)
 {
-    return (this->determinantFromDataPoints(samplesIdx) < 1e-3);
+    return (std::fabs(this->determinantFromDataPoints(samplesIdx)) < 1e-3);
 }

@@ -50,6 +50,7 @@ add_executable(
     tests/CircleFitting/CircleFitting.cpp
     tests/SphereFitting/SphereFitting.hpp
     tests/SphereFitting/SphereFitting.cpp
+    tests/test_iterEstimation.cpp
 )
 
 add_dependencies(unit_tests googletest)

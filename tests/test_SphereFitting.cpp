@@ -38,21 +38,21 @@ TEST(SphereFitting, idealCase)
     SphereFittingProblem * sphereFitting = new SphereFittingProblem();
 
     // Define dataset
-    std::vector<double> x = {0,  2,  0,   0};
-    std::vector<double> y = {0,  0,  2,   0};
-    std::vector<double> z = {2,  0,  0,  -2};
+    std::vector<double> x = {0,  0,  1,   0};
+    std::vector<double> y = {0,  1,  0,   0};
+    std::vector<double> z = {1,  0,  0,  -1};
 
     double cx = 0; // sphere center C:(cx,cy, cz)
     double cy = 0;
     double cz = 0;
-    double radius = 2; //sphere radius
+    double radius = 1; //sphere radius
     double noiseVar = 0.0;
 
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * MSACsolver = new robest::MSAC();
-    MSACsolver->solve(sphereFitting);
+    robest::MSAC * msacSolver = new robest::MSAC();
+    msacSolver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -83,8 +83,8 @@ TEST(SphereFitting, idealCase2)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * MSACsolver = new robest::MSAC();
-    MSACsolver->solve(sphereFitting);
+    robest::MSAC * msacSolver = new robest::MSAC();
+    msacSolver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -117,8 +117,8 @@ TEST(SphereFitting, smallNoise)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * MSACsolver = new robest::MSAC();
-    MSACsolver->solve(sphereFitting);
+    robest::MSAC * msacSolver = new robest::MSAC();
+    msacSolver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -148,8 +148,8 @@ TEST(SphereFitting, outliers)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * MSACsolver = new robest::MSAC();
-    MSACsolver->solve(sphereFitting);
+    robest::MSAC * msacSolver = new robest::MSAC();
+    msacSolver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -172,32 +172,41 @@ TEST(SphereFitting, isDegenerate)
     std::vector<double> z1 = {0,1,2,3};
     sphereFitting->setData(x1,y1,z1);
     ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
-    
+  
     //sample 2
-    std::vector<double> x2 = {0,1,2,3};
-    std::vector<double> y2 = {0,1.001,2};
-    std::vector<double> z2 = {0,1,2,0.001};
+    std::vector<double> x2 = {0,1,0,-1};
+    std::vector<double> y2 = {1,0.-1,0};
+    std::vector<double> z2 = {0,0,0,0};
     sphereFitting->setData(x2,y2,z2);
     ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
-
+ 
     //sample 3
-    std::vector<double> x3 = {0,1,5,7};
-    std::vector<double> y3 = {0,1,2,4};
-    std::vector<double> z3 = {0,1,1,2};
+    double r = 1, angle = 45;
+    std::vector<double> x3 = {r*(std::cos(angle)),-r*(std::cos(angle)),-r*(std::cos(angle)),r*(std::cos(angle))};
+    std::vector<double> y3 = {r*(std::cos(angle)),r*(std::cos(angle)),-r*(std::cos(angle)),-r*(std::cos(angle))};
+    std::vector<double> z3 = {r*(std::cos(angle)),r*(std::cos(angle)),-r*(std::cos(angle)),-r*(std::cos(angle))};
     sphereFitting->setData(x3,y3,z3);
     ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
 
     //sample 4
-    std::vector<double> x4 = {0,  1,  0,   0};
-    std::vector<double> y4 = {0,  0,  1,   0};
-    std::vector<double> z4 = {1,  0,  0,  -1};
+    std::vector<double> x4 = {0,0,0,0};
+    std::vector<double> y4 = {0,1,0,-1};
+    std::vector<double> z4 = {1,0.-1,0};
     sphereFitting->setData(x4,y4,z4);
-    ASSERT_TRUE(!sphereFitting->isDegenerate({0,1,2,3}));
-
-    //sample 5
-    std::vector<double> x5 = {0.0,  0.0,  1.0,   0.0};
-    std::vector<double> y5 = {0.0,  1.0,  0.0,   0.0};
-    std::vector<double> z5 = {1.0,  0.0,  0.0,  -1.0};
+    ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
+   
+    //sample 5 - is not Degenerate
+    std::vector<double> x5 = {0,  1,  0,   0};
+    std::vector<double> y5 = {0,  0,  1,   0};
+    std::vector<double> z5 = {1,  0,  0,  -1};
     sphereFitting->setData(x5,y5,z5);
     ASSERT_TRUE(!sphereFitting->isDegenerate({0,1,2,3}));
+    
+    //sample 6 - is not Degenerate
+    std::vector<double> x6 = {0.0,  0.0,  1.0,   0.0};
+    std::vector<double> y6 = {0.0,  1.0,  0.0,   0.0};
+    std::vector<double> z6 = {1.0,  0.0,  0.0,  -1.0};
+    sphereFitting->setData(x6,y6,z6);
+    ASSERT_TRUE(!sphereFitting->isDegenerate({0,1,2,3}));
+
 }

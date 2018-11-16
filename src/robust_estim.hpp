@@ -76,9 +76,56 @@ class AbstractEstimator
         return idx;
     }
 
-    int estimateNbIter(int dataSize, float alpha = 0.99, float gamma = 0.60)
+    int estimateNbIter(int dataSize, float alpha = 0.99, float gamma = 0.50)
     {
-        return (std::log(alpha)) / (std::log(1 - std::pow(gamma, dataSize)));
+        // Verification of the success probability - alpha
+        if (alpha >= 1)
+        {
+            std::cout << "\n" << "Warning: the success probability is set to 1, iteration number tends to infinity." << std::endl;
+            std::cout << "The maximum allowed success probability is 0.99." << "\n" << std::endl;
+
+            alpha = 0.99;
+        }
+        else if (alpha <= 0)
+        {
+            std::cout << "\n" << "Warning: the value of success probability is negative or set to zero." << std::endl;
+            std::cout << "The minimum allowed success probability is 0.01." << "\n" << std::endl;
+
+            alpha = 0.01;
+        }
+
+        // Verification of the inlier's ratio - gamma
+        if (gamma > 1)
+        {
+            std::cout << "\n" << "Warning: the inlier's ratio value exceeded its maximum, which is 1." << "\n" << std::endl;
+            
+            gamma = 1;
+        }
+
+        if (gamma <= 0)
+        {
+            std::cout << "\n" << "Warning: the inlier's ratio is negative or equals zero." << std::endl;
+            std::cout << "The minimum allowed value is 0.01." << "\n" << std::endl;
+
+            gamma = 0.01;
+        }
+
+        // Counting the number of iteration
+        double nbIter = std::abs((std::log(1 - alpha)) / (std::log(1 - std::pow(gamma, dataSize))));
+
+        if (nbIter == 0)
+        {
+            return 1;
+        }
+        else if (nbIter > 20000)
+        {
+            return 20000;
+        }
+        else
+        {
+            return (int)nbIter;
+        }
+
     }
 
     double getInliersFraction() const { return inliersFraction; }
@@ -120,6 +167,15 @@ class RANSAC : public AbstractEstimator
         problem = pb;
 
         int totalNbSamples = problem->getTotalNbSamples();
+
+        if (nbIter == 0)
+        {
+            std::cout << std::endl;
+            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
+            std::cout << std::endl;
+            nbIter = this->estimateNbIter(totalNbSamples);
+        }
+
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -167,8 +223,10 @@ class MSAC : public AbstractEstimator
 
         if (nbIter == 0)
         {
+            std::cout << std::endl;
+            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
+            std::cout << std::endl;
             nbIter = this->estimateNbIter(totalNbSamples);
-            std::cout << "Automatically calculated number of iterations: " << nbIter << std::endl;
         }
 
         for (int i = 0; i < nbIter; i++)
@@ -236,6 +294,14 @@ class LMedS : public AbstractEstimator
     {
         problem = pb;
         int totalNbSamples = problem->getTotalNbSamples();
+
+        if (nbIter == 0)
+        {
+            std::cout << std::endl;
+            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
+            std::cout << std::endl;
+            nbIter = this->estimateNbIter(totalNbSamples);
+        }
 
         for (int i = 0; i < nbIter; i++)
         {
