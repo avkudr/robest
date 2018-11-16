@@ -170,9 +170,7 @@ class RANSAC : public AbstractEstimator
 
         if (nbIter == 0)
         {
-            std::cout << std::endl;
-            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
-            std::cout << std::endl;
+            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
             nbIter = this->estimateNbIter(totalNbSamples);
         }
 
@@ -223,9 +221,7 @@ class MSAC : public AbstractEstimator
 
         if (nbIter == 0)
         {
-            std::cout << std::endl;
-            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
-            std::cout << std::endl;
+            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
             nbIter = this->estimateNbIter(totalNbSamples);
         }
 
@@ -297,9 +293,7 @@ class LMedS : public AbstractEstimator
 
         if (nbIter == 0)
         {
-            std::cout << std::endl;
-            std::cout << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << std::endl;
-            std::cout << std::endl;
+            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
             nbIter = this->estimateNbIter(totalNbSamples);
         }
 
