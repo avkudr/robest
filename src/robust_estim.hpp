@@ -18,6 +18,7 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <assert.h>
 
 namespace robest
 {
@@ -76,56 +77,22 @@ class AbstractEstimator
         return idx;
     }
 
-    int estimateNbIter(int dataSize, float alpha = 0.99, float gamma = 0.50)
+    int calculateIterationsNb(const int dataSize, const float alpha = 0.99, const float gamma = 0.80)
     {
-        // Verification of the success probability - alpha
-        if (alpha >= 1)
-        {
-            std::cout << "\n" << "Warning: the success probability is set to 1, iteration number tends to infinity." << std::endl;
-            std::cout << "The maximum allowed success probability is 0.99." << "\n" << std::endl;
+        assert(dataSize > 0 && "The size of input data must be > 0");
+        assert((alpha > 0.0 && alpha <  1.0) && "Accepted value of success probability (aplha) is in range (0,1)");
+        assert((gamma > 0.0 && gamma <= 1.0) && "Accepted value of inlier's ratio (gamma) is in range (0,1]");
 
-            alpha = 0.99;
-        }
-        else if (alpha <= 0)
-        {
-            std::cout << "\n" << "Warning: the value of success probability is negative or set to zero." << std::endl;
-            std::cout << "The minimum allowed success probability is 0.01." << "\n" << std::endl;
-
-            alpha = 0.01;
-        }
-
-        // Verification of the inlier's ratio - gamma
-        if (gamma > 1)
-        {
-            std::cout << "\n" << "Warning: the inlier's ratio value exceeded its maximum, which is 1." << "\n" << std::endl;
-            
-            gamma = 1;
-        }
-
-        if (gamma <= 0)
-        {
-            std::cout << "\n" << "Warning: the inlier's ratio is negative or equals zero." << std::endl;
-            std::cout << "The minimum allowed value is 0.01." << "\n" << std::endl;
-
-            gamma = 0.01;
-        }
+        if (gamma == 1.0)
+            return 1;
 
         // Counting the number of iteration
-        double nbIter = std::abs((std::log(1 - alpha)) / (std::log(1 - std::pow(gamma, dataSize))));
+        long long int nbIter = 1 + std::log(1 - alpha) / std::log(1 - std::pow(gamma, dataSize));
+        if ( nbIter < 0 || nbIter > 50000) nbIter = 50000;
 
-        if (nbIter == 0)
-        {
-            return 1;
-        }
-        else if (nbIter > 20000)
-        {
-            return 20000;
-        }
-        else
-        {
-            return (int)nbIter;
-        }
-
+        assert(nbIter > 0 && "Number of interations must be > 0: check solver params or define nbIter manually");
+        
+        return nbIter;
     }
 
     double getInliersFraction() const { return inliersFraction; }
@@ -162,17 +129,14 @@ class RANSAC : public AbstractEstimator
     {
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = 10000)
+    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
 
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter == 0)
-        {
-            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
-            nbIter = this->estimateNbIter(totalNbSamples);
-        }
+        if (nbIter < 0)
+            nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)
         {
@@ -213,17 +177,14 @@ class MSAC : public AbstractEstimator
         sumSqErr = std::numeric_limits<double>::max();
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = 10000)
+    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
 
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter == 0)
-        {
-            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
-            nbIter = this->estimateNbIter(totalNbSamples);
-        }
+        if (nbIter < 0)
+            nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)
         {
@@ -286,16 +247,13 @@ class LMedS : public AbstractEstimator
         }
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = 1000)
+    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter == 0)
-        {
-            std::cout << "\n" << "Warning: zero number of iterations was detected! Automatic estimation of iterations is enabled." << "\n" << std::endl;
-            nbIter = this->estimateNbIter(totalNbSamples);
-        }
+        if (nbIter < 0)
+            nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)
         {

@@ -4,88 +4,69 @@
 
 #include "LineFitting/LineFitting.hpp"
 
-
-TEST(iterEstimation, zeroOutliers)
+TEST(iterEstimationDeathTest, wrongInliersRatio)
 {
     // Estimator initialisation
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
+    robest::RANSAC * solver = new robest::RANSAC();
 
     int dataSize = 500;
     double alpha = 0.99;    // 99% success probability
-    double gamma = 1;       // 100% of inliers
 
-    int estimNbIter = ransacSolver->estimateNbIter(dataSize, alpha, gamma);
-    ASSERT_TRUE(estimNbIter == 1);
+    const auto msg = "Accepted value of inlier's ratio [(]gamma[)] is in range [(]0,1[]]";
+
+    double gamma;
+    gamma = 1.1;     // 110% of inliers - error
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
+    gamma = -1;     // negative percentage of inliers - error
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
+    gamma = 0;
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
-TEST(iterEstimation, maxAlpha)
+TEST(iterEstimation, wrongSuccessProbability)
 {
     // Estimator initialisation
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-
+    robest::RANSAC * solver = new robest::RANSAC();
     int dataSize = 500;
-    double alpha = 1;          // 100% success probability
     double gamma = 0.95;       // 95% of inliers
+    const auto msg = "Accepted value of success probability [(]aplha[)] is in range [(]0,1[)]";
 
-    int estimNbIter = ransacSolver->estimateNbIter(dataSize, alpha, gamma);
-
-    ASSERT_TRUE(estimNbIter == 20000);
+    double alpha;
+    alpha =  1.0;          // 100% success probability - error - be more realist
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
+    alpha =  0.0;          //   0% success probability - error - be more optimist
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
+    alpha = -1.0;         //   negative success probability - error - oh common! :)
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
-TEST(iterEstimation, minAlpha)
+TEST(iterEstimation, wrongInputDataSize)
 {
     // Estimator initialisation
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-
-    int dataSize = 500;
-    double alpha = -5;         // success probability is incorrect
-    double gamma = 0.95;       // 95% of inliers
-
-    int estimNbIter = ransacSolver->estimateNbIter(dataSize, alpha, gamma);
-
-    ASSERT_TRUE(estimNbIter == 20000);
-}
-
-TEST(iterEstimation, maxGamma)
-{
-    // Estimator initialisation
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-
+    robest::RANSAC * solver = new robest::RANSAC();
+    
     int dataSize = 500;
     double alpha = 0.99;         
-    double gamma = 5;            // incorrected inlier's ratio
-
-    int estimNbIter = ransacSolver->estimateNbIter(dataSize, alpha, gamma);
-
-    ASSERT_TRUE(estimNbIter == 1);
+    double gamma = 0.5;            
 }
 
-TEST(iterEstimation, zeroInliers)
+TEST(iterEstimationDeathTest, valuesIterationsNb)
 {
-    // Estimator initialisation
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
+    robest::MSAC * solver = new robest::MSAC();
+    
+    int dataSize = 8;
+    double gamma = 0.50;
+    double alpha = 0.99;
+    EXPECT_EQ(solver->calculateIterationsNb(dataSize, alpha, gamma),1177);
 
-    int dataSize = 500;
-    double alpha = 0.99;         
-    double gamma = 0;            // incorrected inlier's ratio
+    dataSize = 6;
+    gamma    = 0.95;
+    alpha    = 0.99;
+    EXPECT_EQ(solver->calculateIterationsNb(dataSize, alpha, gamma),4);
 
-    int estimNbIter = ransacSolver->estimateNbIter(dataSize, alpha, gamma);
-
-    ASSERT_TRUE(estimNbIter == 20000);
-}
-
-TEST(iterEstimation, zeroIterationInit)
-{
-    int nbIter = 0;
-
-    std::vector<double> x = {1, 2, 3, 4, 5};
-    std::vector<double> y = {1, 2, 3, 4, 5};
-
-    // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
-    lineFitting->setData(x,y);
-
-    // Solve
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting, 0.1, nbIter);
+    dataSize = 4;
+    gamma    = 0.60;
+    alpha    = 0.99;
+    EXPECT_EQ(solver->calculateIterationsNb(dataSize, alpha, gamma),34);
+    
 }

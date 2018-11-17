@@ -35,6 +35,10 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "cstring": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp"
     }
 }

@@ -43,8 +43,8 @@ TEST(LineFitting, idealCase)
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting);
+    robest::RANSAC * solver = new robest::RANSAC();
+    solver->solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -70,8 +70,8 @@ TEST(LineFitting, idealCase2)
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting);
+    robest::RANSAC * solver = new robest::RANSAC();
+    solver->solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -97,8 +97,8 @@ TEST(LineFitting, smallNoise)
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting);
+    robest::RANSAC * solver = new robest::RANSAC();
+    solver->solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -124,8 +124,8 @@ TEST(LineFitting, outliers)
     // Solve
     double thres = 0.001;
     int nbIter = 20;
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting, thres, nbIter);
+    robest::RANSAC * solver = new robest::RANSAC();
+    solver->solve(lineFitting, thres, nbIter);
 
     // Get result
     double res_k,res_b;
@@ -149,8 +149,9 @@ TEST(LineFitting, almostHalfOutlier)
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * ransacSolver = new robest::RANSAC();
-    ransacSolver->solve(lineFitting);
+    robest::RANSAC * solver = new robest::RANSAC();
+    int nbIter = solver->calculateIterationsNb(x.size(),0.99,0.5);
+    solver->solve(lineFitting,0.1,nbIter);
 
     // Get result
     double res_k,res_b;
@@ -176,8 +177,8 @@ TEST(LineFitting, noiseCaseMSAC)
     lineFitting->setData(x,y);
 
     // Solve
-    robest::MSAC * ransacSolver = new robest::MSAC();
-    ransacSolver->solve(lineFitting);
+    robest::MSAC * solver = new robest::MSAC();
+    solver->solve(lineFitting);
 
     // Get result
     double res_k,res_b;
