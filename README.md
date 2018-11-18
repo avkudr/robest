@@ -20,3 +20,8 @@ cd build
 cmake ..
 make
 ```
+### Contributors
+- [Andrey Kudryavtsev](avkudr.github.io)
+- [Mark Anisimov](https://github.com/qM4RCp)
+- [Rahima Djahel](https://github.com/rahma24000)
+
