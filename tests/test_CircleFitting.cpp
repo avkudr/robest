@@ -43,8 +43,8 @@ TEST(CircleFitting, idealCase)
     CircleFittingProblem * circleFitting = new CircleFittingProblem();
     circleFitting->setData(x,y);
 
-    robest::LMedS * lmedsSolver = new robest::LMedS();
-    lmedsSolver->solve(circleFitting);
+    robest::LMedS * solver = new robest::LMedS();
+    solver->solve(circleFitting);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -71,8 +71,8 @@ TEST(CircleFitting, idealCase2)
 
     double thres = 0.001;
     int nbIter = 20;
-    robest::LMedS * lmedsSolver = new robest::LMedS();
-    lmedsSolver->solve(circleFitting, thres, nbIter);
+    robest::LMedS * solver = new robest::LMedS();
+    solver->solve(circleFitting, thres, nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -97,8 +97,8 @@ TEST(CircleFitting, smallNoise)
     CircleFittingProblem * circleFitting = new CircleFittingProblem();
     circleFitting->setData(x,y);
 
-    robest::LMedS * lmedsSolver = new robest::LMedS();
-    lmedsSolver->solve(circleFitting);
+    robest::LMedS * solver = new robest::LMedS();
+    solver->solve(circleFitting);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -116,9 +116,9 @@ TEST(CircleFitting, outliers)
     CircleFittingProblem * circleFitting = new CircleFittingProblem();
     circleFitting->setData(x,y);
 
-    robest::LMedS * lmedsSolver = new robest::LMedS();
-    auto nbIter = lmedsSolver->calculateIterationsNb(x.size(),0.99,0.45);
-    lmedsSolver->solve(circleFitting, 0.1, nbIter);
+    robest::LMedS * solver = new robest::LMedS();
+    auto nbIter = solver->calculateIterationsNb(x.size(),0.99,0.45);
+    solver->solve(circleFitting, 0.1, nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);

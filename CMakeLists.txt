@@ -40,17 +40,20 @@ add_library(googletest ${GOOGLETEST_SOURCES})
 
 add_executable(
     unit_tests
-    tests/main.cpp
-    tests/test_LineFitting.cpp
-    tests/test_CircleFitting.cpp
-    tests/test_SphereFitting.cpp
     tests/LineFitting/LineFitting.hpp
     tests/LineFitting/LineFitting.cpp
     tests/CircleFitting/CircleFitting.hpp
     tests/CircleFitting/CircleFitting.cpp
     tests/SphereFitting/SphereFitting.hpp
     tests/SphereFitting/SphereFitting.cpp
+    tests/PlaneFitting/PlaneFitting.hpp
+    tests/PlaneFitting/PlaneFitting.cpp
     tests/test_iterEstimation.cpp
+    tests/test_LineFitting.cpp
+    tests/test_CircleFitting.cpp
+    tests/test_SphereFitting.cpp
+    tests/test_PlaneFitting.cpp
+    tests/main.cpp
 )
 
 add_dependencies(unit_tests googletest)

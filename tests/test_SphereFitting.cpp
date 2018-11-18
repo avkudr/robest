@@ -51,8 +51,8 @@ TEST(SphereFitting, idealCase)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * msacSolver = new robest::MSAC();
-    msacSolver->solve(sphereFitting);
+    robest::MSAC * solver = new robest::MSAC();
+    solver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -83,8 +83,8 @@ TEST(SphereFitting, idealCase2)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * msacSolver = new robest::MSAC();
-    msacSolver->solve(sphereFitting);
+    robest::MSAC * solver = new robest::MSAC();
+    solver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -117,8 +117,8 @@ TEST(SphereFitting, smallNoise)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * msacSolver = new robest::MSAC();
-    msacSolver->solve(sphereFitting);
+    robest::MSAC * solver = new robest::MSAC();
+    solver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -148,8 +148,8 @@ TEST(SphereFitting, outliers)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * msacSolver = new robest::MSAC();
-    msacSolver->solve(sphereFitting);
+    robest::MSAC * solver = new robest::MSAC();
+    solver->solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
