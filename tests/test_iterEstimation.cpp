@@ -45,11 +45,14 @@ TEST(iterEstimationDeathTest, wrongInputDataSize)
     // Estimator initialisation
     robest::RANSAC * solver = new robest::RANSAC();
     
-    int dataSize = 0;
+    int dataSize;
     double alpha = 0.99;         
     double gamma = 0.5;   
     const auto msg = "The size of input data must be > 0";
 
+    dataSize = 0;        // 0 points
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
+    dataSize = -15;      // negative amount of points
     EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
