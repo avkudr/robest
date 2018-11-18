@@ -117,7 +117,8 @@ TEST(CircleFitting, outliers)
     circleFitting->setData(x,y);
 
     robest::LMedS * lmedsSolver = new robest::LMedS();
-    lmedsSolver->solve(circleFitting);
+    auto nbIter = lmedsSolver->calculateIterationsNb(x.size(),0.99,0.45);
+    lmedsSolver->solve(circleFitting, 0.1, nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);

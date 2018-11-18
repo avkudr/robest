@@ -20,14 +20,14 @@ void CircleFittingProblem::setData(std::vector<double> & x, std::vector<double> 
     }
 }
 
-double CircleFittingProblem::estimErrorForSample(int i)
+inline double CircleFittingProblem::estimErrorForSample(int i)
 {
     // distance circle-point = abs(<distance point-center> - radius)
     Point2d & p = points[i];
     return std::abs(sqrt((p.x-cx)*(p.x-cx)+(p.y-cy)*(p.y-cy)) - r);
 }
 
-void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
+inline void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
     if( !isDegenerate(samplesIdx)){
         Point2d & P = points[samplesIdx[0]];
         Point2d & V = points[samplesIdx[1]];
@@ -46,7 +46,8 @@ void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
         r = sqrt((P.x - cx)*(P.x - cx)+(P.y - cy)*(P.y - cy));
     }
 }
-bool CircleFittingProblem::isDegenerate(std::vector<int> samplesIdx)
+
+inline bool CircleFittingProblem::isDegenerate(const std::vector<int> & samplesIdx)
 {
     Point2d & P = points[samplesIdx[0]];
     Point2d & V = points[samplesIdx[1]];

@@ -1,5 +1,5 @@
 /**
- *  @brief Line fitting to a set of 2D points
+ *  @brief Circle fitting to a set of 2D points
  *
  *  @author  Andrey Kudryavtsev (avkudr.github.io)
  *  @author  Rahima Djahel (github:rahma24000)
@@ -42,7 +42,7 @@ public:
         res_r  = this->r;
     }
 
-    bool isDegenerate(std::vector<int> samplesIdx);
+    bool isDegenerate(const std::vector<int> & samplesIdx);
 
 private:
 
