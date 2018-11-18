@@ -135,7 +135,7 @@ class RANSAC : public AbstractEstimator
 
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter < 0)
+        if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)
@@ -183,7 +183,7 @@ class MSAC : public AbstractEstimator
 
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter < 0)
+        if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)
@@ -252,7 +252,7 @@ class LMedS : public AbstractEstimator
         problem = pb;
         int totalNbSamples = problem->getTotalNbSamples();
 
-        if (nbIter < 0)
+        if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         for (int i = 0; i < nbIter; i++)

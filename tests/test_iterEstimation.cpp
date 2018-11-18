@@ -23,7 +23,7 @@ TEST(iterEstimationDeathTest, wrongInliersRatio)
     EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
-TEST(iterEstimation, wrongSuccessProbability)
+TEST(iterEstimationDeathTest, wrongSuccessProbability)
 {
     // Estimator initialisation
     robest::RANSAC * solver = new robest::RANSAC();
@@ -40,17 +40,20 @@ TEST(iterEstimation, wrongSuccessProbability)
     EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
-TEST(iterEstimation, wrongInputDataSize)
+TEST(iterEstimationDeathTest, wrongInputDataSize)
 {
     // Estimator initialisation
     robest::RANSAC * solver = new robest::RANSAC();
     
-    int dataSize = 500;
+    int dataSize = 0;
     double alpha = 0.99;         
-    double gamma = 0.5;            
+    double gamma = 0.5;   
+    const auto msg = "The size of input data must be > 0";
+
+    EXPECT_DEATH(solver->calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 
-TEST(iterEstimationDeathTest, valuesIterationsNb)
+TEST(checkIterNbResults, valuesIterationsNb)
 {
     robest::MSAC * solver = new robest::MSAC();
     
