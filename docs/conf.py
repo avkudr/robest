@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'robest'
-copyright = u'2018, Andrey Kudryavtsev'
+copyright = u'2018, <robest> authors'
 author = u'Andrey Kudryavtsev'
 
 # The short X.Y version
@@ -28,6 +28,9 @@ version = u''
 # The full version, including alpha/beta/rc tags
 release = u''
 
+# on_rtd is whether we are on readthedocs.org
+import os
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # -- General configuration ---------------------------------------------------
 
@@ -39,6 +42,11 @@ release = u''
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.todo',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -66,15 +74,19 @@ language = None
 exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = None
-
+#pygments_style = 'sphinx'
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
+
+# Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = ["_themes",]
+#if not on_rtd:  # only import and set the theme if we're building docs locally
+#    html_theme = 'armstrong'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
