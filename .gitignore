@@ -2,3 +2,6 @@ CMakeLists.txt.user
 build*/
 .vscode*/
 settings.json
+_build
+_static
+_templates
