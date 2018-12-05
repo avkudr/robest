@@ -20,10 +20,28 @@ Welcome to robest's documentation!
 What is *robest*?
 -----------------
 
-**robest** is a lightweight C++ library of robust estimators such as RANSAC or LMEDS. It helps solving issues with model fitting to noisy data containing outliers. 
+**robest** is a lightweight C++ library of robust estimators such as RANSAC or LMEDS. It helps solving issues with model fitting to noisy data containing outliers.
+
+.. image:: pages/images/robustEstimCircleEx.jpg
+   :width: 1346px
+   :height: 513px
+   :scale: 50 %
+   :alt: set of 2D points
+   :align: center	
+
+
+
 
 Why *robest*?
 -------------
+
+There are at least three main reasons why robest:
+
+- First, the library is very light, and it makes wider the possible limits of its use.
+
+- Secondly, due to its structure, robest is easy customizable: easy to add new estimation problem or new estimation algorithm. Follow our tutorial for more info
+
+- Finally, the **robest** library is very compact - only 1 file. This allows you to quickly install it.
 
 Cite Us
 =======
