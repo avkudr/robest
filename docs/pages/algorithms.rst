@@ -20,6 +20,7 @@ Other Rabust estimators, such as MSAC or MLESAC, follow the similaire steps, the
    :height: 204px
    :scale: 100 %
    :alt: loss functions	
+   :align: center
 
 
 RANSAC

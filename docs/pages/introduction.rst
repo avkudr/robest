@@ -60,8 +60,6 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :align: center
 
 
-   
-      :align: center
 
 
 
