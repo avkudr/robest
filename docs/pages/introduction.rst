@@ -7,19 +7,6 @@ cannot guarantee a robustness of the results obtained. The main reason is the pr
 Despite this, among all these methods we can distinguish a family of solutions regrouped by the name of robust estimators
 such as Least Median of Squared (LMedS) or RANSAC.
 
-Both methods are iterative and based on a random selection of a small subset of samples which is used for model estimation.
-Then, using their proper loss function, they obtain a score for the given model, i.e. how well the model fits to the data.
-After a number of iterations, the model with the best score is retained as the solution of the problem. The algorithm is presented in Figure below.
-
-.. image:: images/flowchartRobest.jpg
-   :width: 538px
-   :height: 868px
-   :scale: 75 %
-   :alt: flowchart of Robest
-   :align: center	
-
-
-
 Consider the work of the method RANSAC on the example of the circle fitting.
 
 - *Step I*: 
@@ -73,13 +60,7 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :align: center
 
 
-   Other Rabust estimators, such as MSAC or MLESAC, follow the similaire steps, the main difference between the methods is thier loss function.
-
-   .. image:: images/lossFuncEx.jpg
-      :width: 306px
-      :height: 204px
-      :scale: 100 %
-      :alt: loss functions
+   
       :align: center
 
 
