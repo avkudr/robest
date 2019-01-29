@@ -57,10 +57,10 @@ TEST(PlaneFitting, idealCase)
     planeFitting->getResult(res_a,res_b,res_c,res_d);
 
     //show result
-    ASSERT_NEAR( fabs(a), fabs(res_a), 1.0e-6);
-    ASSERT_NEAR( fabs(b), fabs(res_b), 1.0e-6);
-    ASSERT_NEAR( fabs(c), fabs(res_c), 1.0e-6);
-    ASSERT_NEAR( fabs(d), fabs(res_d), 1.0e-6);
+    EXPECT_NEAR( fabs(a), fabs(res_a), 1.0e-6);
+    EXPECT_NEAR( fabs(b), fabs(res_b), 1.0e-6);
+    EXPECT_NEAR( fabs(c), fabs(res_c), 1.0e-6);
+    EXPECT_NEAR( fabs(d), fabs(res_d), 1.0e-6);
 }
 
 TEST(PlaneFitting, idealCase2)
@@ -121,8 +121,8 @@ TEST(PlaneFitting, idealCase3)
     d = d / norm;
 
     //show result
-    ASSERT_NEAR( a,      res_a, 1.0e-6);
-    ASSERT_NEAR( b,      res_b, 1.0e-6);
-    ASSERT_NEAR( c, fabs(res_c), 1.0e-6);
-    ASSERT_NEAR( d,      res_d, 1.0e-6);
+    EXPECT_NEAR( a, fabs(res_a), 1.0e-6);
+    EXPECT_NEAR( b, fabs(res_b), 1.0e-6);
+    EXPECT_NEAR( c, fabs(res_c), 1.0e-6);
+    EXPECT_NEAR( d, fabs(res_d), 1.0e-6);
 }

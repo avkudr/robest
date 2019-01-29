@@ -27,7 +27,7 @@ inline double SphereFittingProblem::estimErrorForSample(int i)
     return std::fabs(std::sqrt(std::pow((p.x - this->cx),2)+ std::pow((p.y - this->cy),2) + std::pow((this->cz - p.z),2)) - this->r);
 }
 
-inline void SphereFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
+inline void SphereFittingProblem::estimModelFromSamples(const std::vector<int> & samplesIdx)
 {
     const Point3Dvector & P = this->points;
 

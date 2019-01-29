@@ -20,6 +20,8 @@
 #include <limits>
 #include <assert.h>
 
+#include <omp.h>
+
 namespace robest
 {
 
@@ -28,7 +30,7 @@ class EstimationProblem
   public:
     // Functions to overload in your class:
     virtual double estimErrorForSample(int i) = 0;
-    virtual void   estimModelFromSamples(std::vector<int> samplesIdx) = 0;
+    virtual void   estimModelFromSamples(const std::vector<int> & samplesIdx) = 0;
     virtual int    getTotalNbSamples() const = 0;
 
     int getNbParams() const { return nbParams; }
@@ -103,6 +105,7 @@ class AbstractEstimator
     {
         int totalNbSamples = problem->getTotalNbSamples();
         inliersIdx.clear();
+        #pragma omp parallel for
         for (int j = 0; j < totalNbSamples; j++)
         {
             double error = problem->estimErrorForSample(j);
@@ -138,6 +141,7 @@ class RANSAC : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
+        #pragma omp parallel for nowait
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -156,12 +160,16 @@ class RANSAC : public AbstractEstimator
                 }
             }
 
-            double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
-            if (inliersFraction > this->inliersFraction)
+            #pragma omp critical
             {
-                this->inliersFraction = inliersFraction;
-                this->bestIdxSet = indices;
+                double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
+                if (inliersFraction > this->inliersFraction)
+                {
+                    this->inliersFraction = inliersFraction;
+                    this->bestIdxSet = indices;
+                }
             }
+            
         }
         problem->estimModelFromSamples(bestIdxSet);
         getInliers(thres);
@@ -186,6 +194,7 @@ class MSAC : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
+        #pragma omp parallel for nowait
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -207,13 +216,15 @@ class MSAC : public AbstractEstimator
                 }
             }
 
-            double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
-
-            if (sumSqErr < this->sumSqErr )
+            #pragma omp critical
             {
-                this->inliersFraction = inliersFraction;
-                this->sumSqErr = sumSqErr;
-                this->bestIdxSet = indices;
+                double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
+                if (sumSqErr < this->sumSqErr )
+                {
+                    this->inliersFraction = inliersFraction;
+                    this->sumSqErr = sumSqErr;
+                    this->bestIdxSet = indices;
+                }
             }
         }
         
@@ -255,6 +266,7 @@ class LMedS : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
+        #pragma omp parallel for nowait
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -269,10 +281,14 @@ class LMedS : public AbstractEstimator
                 errorsVec[j] = error * error; // error must be squared!
             }
             double med = median(errorsVec);
-            if (med < this->med)
+
+            #pragma omp critical
             {
-                this->med = med;
-                this->bestIdxSet = indices;
+                if (med < this->med)
+                {
+                    this->med = med;
+                    this->bestIdxSet = indices;
+                }
             }
         }
 

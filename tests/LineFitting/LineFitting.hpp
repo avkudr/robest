@@ -30,7 +30,7 @@ public:
     void setData(std::vector<double> & x, std::vector<double> & y);
 
     double estimErrorForSample(int i);
-    void estimModelFromSamples(std::vector<int> samplesIdx);
+    void estimModelFromSamples(const std::vector<int> & samplesIdx);
 
     int getTotalNbSamples() const{
         return (int) points.size();

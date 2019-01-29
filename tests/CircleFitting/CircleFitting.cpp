@@ -27,7 +27,7 @@ inline double CircleFittingProblem::estimErrorForSample(int i)
     return std::abs(sqrt((p.x-cx)*(p.x-cx)+(p.y-cy)*(p.y-cy)) - r);
 }
 
-inline void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
+inline void CircleFittingProblem::estimModelFromSamples(const std::vector<int> & samplesIdx){
     if( !isDegenerate(samplesIdx)){
         Point2d & P = points[samplesIdx[0]];
         Point2d & V = points[samplesIdx[1]];

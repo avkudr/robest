@@ -54,7 +54,7 @@ Code
            void setData(std::vector<double> & x, std::vector<double> & y);
 
            double estimErrorForSample(int i);
-           void   estimModelFromSamples(std::vector<int> samplesIdx);
+           void   estimModelFromSamples(const std::vector<int> & samplesIdx);
 
            int getTotalNbSamples() const{
 	       return (int) points.size();
@@ -110,7 +110,7 @@ Code
            return std::abs(sqrt((p.x-cx)*(p.x-cx)+(p.y-cy)*(p.y-cy)) - r);
        }
 
-       inline void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
+       inline void CircleFittingProblem::estimModelFromSamples(const std::vector<int> & samplesIdx){
            if( !isDegenerate(samplesIdx)){
                Point2d & P = points[samplesIdx[0]];
                Point2d & V = points[samplesIdx[1]];
@@ -362,7 +362,7 @@ Explanation
            double estimErrorForSample(int i);
 
            // Function of calculating the parameters of the model
-           void   estimModelFromSamples(std::vector<int> samplesIdx);
+           void   estimModelFromSamples(const std::vector<int> & samplesIdx);
 
            // Data size calculation function
            int getTotalNbSamples() const{
@@ -547,7 +547,7 @@ Explanation
 
        .. code-block:: c++
 
-          inline void CircleFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx){
+          inline void CircleFittingProblem::estimModelFromSamples(const std::vector<int> & samplesIdx){
               
               // Validation of selected points
               if( !isDegenerate(samplesIdx)){

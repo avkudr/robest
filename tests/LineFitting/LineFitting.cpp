@@ -29,7 +29,7 @@ inline double LineFittingProblem::estimErrorForSample(int i)
     return std::fabs(a*p.x - p.y + b) / sqrt(a*a + 1); // distance line-point
 }
 
-inline void LineFittingProblem::estimModelFromSamples(std::vector<int> samplesIdx)
+inline void LineFittingProblem::estimModelFromSamples(const std::vector<int> & samplesIdx)
 {
     //line from two points
     Point2d & P = points[samplesIdx[0]];
