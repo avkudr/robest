@@ -35,7 +35,7 @@ void generateSphereData(
 TEST(SphereFitting, idealCase)
 {
     // Define estimation problem
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+    auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     // Define dataset
     std::vector<double> x = {0,  0,  1,   0};
@@ -51,8 +51,8 @@ TEST(SphereFitting, idealCase)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(sphereFitting);
+    robest::MSAC solver;
+    solver.solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -67,7 +67,7 @@ TEST(SphereFitting, idealCase)
 TEST(SphereFitting, idealCase2)
 {
     // Define estimation problem
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+    auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     // Define dataset
     std::vector<double> x = {   8,   12,     4,     8,     8,     8};
@@ -83,8 +83,8 @@ TEST(SphereFitting, idealCase2)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(sphereFitting);
+    robest::MSAC solver;
+    solver.solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -99,7 +99,7 @@ TEST(SphereFitting, idealCase2)
 TEST(SphereFitting, smallNoise)
 {
     // Define estimation problem
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+    auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     std::vector<double> x;
     std::vector<double> y;
@@ -117,8 +117,8 @@ TEST(SphereFitting, smallNoise)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(sphereFitting);
+    robest::MSAC solver;
+    solver.solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -133,7 +133,7 @@ TEST(SphereFitting, smallNoise)
 TEST(SphereFitting, outliers)
 {
     // Define estimation problem
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+    auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     // Define dataset
     std::vector<double> x = {3, 8,  -2, 3,  3,  3,  16, -24, 0};
@@ -148,8 +148,8 @@ TEST(SphereFitting, outliers)
     sphereFitting->setData(x,y,z);
 
     // Solver init
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(sphereFitting);
+    robest::MSAC solver;
+    solver.solve(sphereFitting);
 
     // Get results
     double res_cx,res_cy, res_cz,res_r;
@@ -164,7 +164,7 @@ TEST(SphereFitting, outliers)
 TEST(SphereFitting, isDegenerate)
 {
     // Define estimation problem
-    SphereFittingProblem * sphereFitting = new SphereFittingProblem();
+    auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     //sample 1
     std::vector<double> x1 = {0,1,2,3};

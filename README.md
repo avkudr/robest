@@ -21,7 +21,7 @@ cmake ..
 make
 ```
 ### Contributors
-- [Andrey Kudryavtsev](avkudr.github.io)
+- [Andrey Kudryavtsev](https://avkudr.github.io/)
 - [Mark Anisimov](https://github.com/qM4RCp)
 - [Rahima Djahel](https://github.com/rahma24000)
 - [Sounkalo Dembélé](https://www.femto-st.fr/fr/personnel-femto/sounkalodembele)
