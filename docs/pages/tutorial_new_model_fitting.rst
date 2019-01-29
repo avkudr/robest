@@ -197,7 +197,7 @@ Code
            CircleFittingProblem * circleFitting = new CircleFittingProblem();
            circleFitting->setData(x,y);
 
-           robest::LMedS * solver = new robest::LMedS();
+           robest::LMedS solver;
            solver->solve(circleFitting);
 
            double res_cx,res_cy,res_r;
@@ -225,7 +225,7 @@ Code
 
            double thres = 0.001;
            int nbIter = 20;
-           robest::LMedS * solver = new robest::LMedS();
+           robest::LMedS solver;
            solver->solve(circleFitting, thres, nbIter);
 
            double res_cx,res_cy,res_r;
@@ -251,7 +251,7 @@ Code
            CircleFittingProblem * circleFitting = new CircleFittingProblem();
            circleFitting->setData(x,y);
 
-           robest::LMedS * solver = new robest::LMedS();
+           robest::LMedS solver;
            solver->solve(circleFitting);
 
            double res_cx,res_cy,res_r;
@@ -270,7 +270,7 @@ Code
            CircleFittingProblem * circleFitting = new CircleFittingProblem();
            circleFitting->setData(x,y);
 
-           robest::LMedS * solver = new robest::LMedS();
+           robest::LMedS solver;
            auto nbIter = solver->calculateIterationsNb(x.size(),0.99,0.45);
            solver->solve(circleFitting, 0.1, nbIter);
 
@@ -634,7 +634,7 @@ Explanation
               circleFitting->setData(x,y);
 
               // Solving
-              robest::LMedS * solver = new robest::LMedS();
+              robest::LMedS solver;
               solver->solve(circleFitting);
 	      
  	      // Getting the results
@@ -665,7 +665,7 @@ Explanation
 	      // Solving
               double thres = 0.001;
               int nbIter = 20;
-              robest::LMedS * solver = new robest::LMedS();
+              robest::LMedS solver;
               solver->solve(circleFitting, thres, nbIter);
 
 	      // Getting the results
@@ -700,7 +700,7 @@ Explanation
               circleFitting->setData(x,y);
 
 	      // Solving
-              robest::LMedS * solver = new robest::LMedS();
+              robest::LMedS solver;
               solver->solve(circleFitting);
 
   	      // Getting the results
@@ -729,7 +729,7 @@ Explanation
               circleFitting->setData(x,y);
 
 	      // Solving
-              robest::LMedS * solver = new robest::LMedS();
+              robest::LMedS solver;
               auto nbIter = solver->calculateIterationsNb(x.size(),0.99,0.45);
               solver->solve(circleFitting, 0.1, nbIter);
 	

@@ -40,11 +40,11 @@ TEST(CircleFitting, idealCase)
 
     generateCircleData(cx,cy,radius,noiseVar,x,y);
 
-    CircleFittingProblem * circleFitting = new CircleFittingProblem();
+    auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
 
-    robest::LMedS * solver = new robest::LMedS();
-    solver->solve(circleFitting);
+    robest::LMedS solver;
+    solver.solve(circleFitting);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -66,13 +66,13 @@ TEST(CircleFitting, idealCase2)
 
     generateCircleData(cx,cy,radius,noiseVar,x,y);
 
-    CircleFittingProblem * circleFitting = new CircleFittingProblem();
+    auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
 
     double thres = 0.001;
     int nbIter = 20;
-    robest::LMedS * solver = new robest::LMedS();
-    solver->solve(circleFitting, thres, nbIter);
+    robest::LMedS solver;
+    solver.solve(circleFitting, thres, nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -94,11 +94,11 @@ TEST(CircleFitting, smallNoise)
 
     generateCircleData(cx,cy,radius,noiseVar,x,y);
 
-    CircleFittingProblem * circleFitting = new CircleFittingProblem();
+    auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
 
-    robest::LMedS * solver = new robest::LMedS();
-    solver->solve(circleFitting);
+    robest::LMedS solver;
+    solver.solve(circleFitting);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -113,12 +113,12 @@ TEST(CircleFitting, outliers)
     std::vector<double> x = {1,0,-1, 0, sqrt(2)/2.0, 24,  8, 26};
     std::vector<double> y = {0,1, 0,-1, sqrt(2)/2.0,  8, 10,  3};
 
-    CircleFittingProblem * circleFitting = new CircleFittingProblem();
+    auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
 
-    robest::LMedS * solver = new robest::LMedS();
-    auto nbIter = solver->calculateIterationsNb(x.size(),0.99,0.45);
-    solver->solve(circleFitting, 0.1, nbIter);
+    robest::LMedS solver;
+    auto nbIter = solver.calculateIterationsNb(x.size(),0.99,0.45);
+    solver.solve(circleFitting, 0.1, nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -136,7 +136,7 @@ TEST(CircleFitting, isDegenerate)
     std::vector<double> y1 = {0,1,2};
 
     // Define estimation problem
-    CircleFittingProblem * circleFitting = new CircleFittingProblem();
+    auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x1,y1);
     ASSERT_TRUE(circleFitting->isDegenerate({0,1,2}));
 

@@ -47,12 +47,11 @@ TEST(PlaneFitting, idealCase)
     std::vector<double> x, y, z;
     generateData({a,b,c,d},x,y,z);
 
-    PlaneFittingProblem * planeFitting = new PlaneFittingProblem();
+    auto planeFitting = std::make_shared<PlaneFittingProblem>();
     planeFitting->setData(x,y,z);
 
-    //RANSAC * solver = new RANSAC();
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(planeFitting);
+    robest::MSAC solver;
+    solver.solve(planeFitting);
     double res_a,res_b,res_c, res_d;
     planeFitting->getResult(res_a,res_b,res_c,res_d);
 
@@ -73,12 +72,11 @@ TEST(PlaneFitting, idealCase2)
     std::vector<double> x, y, z;
     generateData({a,b,c,d},x,y,z);
 
-    PlaneFittingProblem * planeFitting = new PlaneFittingProblem();
+    auto planeFitting = std::make_shared<PlaneFittingProblem>();
     planeFitting->setData(x,y,z);
 
-    //RANSAC * solver = new RANSAC();
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(planeFitting);
+    robest::MSAC solver;
+    solver.solve(planeFitting);
     double res_a,res_b,res_c, res_d;
     planeFitting->getResult(res_a,res_b,res_c,res_d);
 
@@ -105,12 +103,11 @@ TEST(PlaneFitting, idealCase3)
     std::vector<double> x, y, z;
     generateData({a,b,c,d},x,y,z);
 
-    PlaneFittingProblem * planeFitting = new PlaneFittingProblem();
+    auto planeFitting = std::make_shared<PlaneFittingProblem>();
     planeFitting->setData(x,y,z);
 
-    //RANSAC * solver = new RANSAC();
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(planeFitting);
+    robest::MSAC solver;
+    solver.solve(planeFitting);
     double res_a,res_b,res_c, res_d;
     planeFitting->getResult(res_a,res_b,res_c,res_d);
 

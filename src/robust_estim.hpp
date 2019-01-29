@@ -18,6 +18,7 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <memory>
 #include <assert.h>
 
 #include <omp.h>
@@ -118,7 +119,7 @@ class AbstractEstimator
         this->inliersFraction = (double)(inliersIdx.size()) / (double)(totalNbSamples);
     }
 
-    EstimationProblem *problem;
+    std::shared_ptr<EstimationProblem> problem;
     std::vector<int> bestIdxSet;
     std::vector<int> inliersIdx;
     double inliersFraction = -1.0;
@@ -132,7 +133,7 @@ class RANSAC : public AbstractEstimator
     {
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
+    void solve(std::shared_ptr<EstimationProblem> pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
 
@@ -185,7 +186,7 @@ class MSAC : public AbstractEstimator
         sumSqErr = std::numeric_limits<double>::max();
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
+    void solve(std::shared_ptr<EstimationProblem> pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
 
@@ -258,7 +259,7 @@ class LMedS : public AbstractEstimator
         }
     }
 
-    void solve(EstimationProblem *pb, double thres = 0.1, int nbIter = -1)
+    void solve(std::shared_ptr<EstimationProblem> pb, double thres = 0.1, int nbIter = -1)
     {
         problem = pb;
         int totalNbSamples = problem->getTotalNbSamples();

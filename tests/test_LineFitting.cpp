@@ -39,12 +39,12 @@ TEST(LineFitting, idealCase)
     generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * solver = new robest::RANSAC();
-    solver->solve(lineFitting);
+    robest::RANSAC solver; 
+    solver.solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -66,12 +66,12 @@ TEST(LineFitting, idealCase2)
     generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * solver = new robest::RANSAC();
-    solver->solve(lineFitting);
+    robest::RANSAC solver; 
+    solver.solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -93,12 +93,12 @@ TEST(LineFitting, smallNoise)
     generateLineData(k,b,noise,x,y);
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * solver = new robest::RANSAC();
-    solver->solve(lineFitting);
+    robest::RANSAC solver; 
+    solver.solve(lineFitting);
 
     // Get result
     double res_k,res_b;
@@ -118,14 +118,14 @@ TEST(LineFitting, outliers)
     double b = 0.0;
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
     double thres = 0.001;
     int nbIter = 20;
-    robest::RANSAC * solver = new robest::RANSAC();
-    solver->solve(lineFitting, thres, nbIter);
+    robest::RANSAC solver; 
+    solver.solve(lineFitting, thres, nbIter);
 
     // Get result
     double res_k,res_b;
@@ -145,13 +145,13 @@ TEST(LineFitting, almostHalfOutlier)
     double b = 0.0;
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
-    robest::RANSAC * solver = new robest::RANSAC();
-    int nbIter = solver->calculateIterationsNb(x.size(),0.99,0.5);
-    solver->solve(lineFitting,0.1,nbIter);
+    robest::RANSAC solver;
+    int nbIter = solver.calculateIterationsNb(x.size(),0.99,0.5);
+    solver.solve(lineFitting,0.1,nbIter);
 
     // Get result
     double res_k,res_b;
@@ -172,12 +172,12 @@ TEST(LineFitting, noiseCaseMSAC)
     double b = 0.0;
 
     // Define estimation problem
-    LineFittingProblem * lineFitting = new LineFittingProblem();
+    auto lineFitting = std::make_shared<LineFittingProblem>();
     lineFitting->setData(x,y);
 
     // Solve
-    robest::MSAC * solver = new robest::MSAC();
-    solver->solve(lineFitting);
+    robest::MSAC solver; 
+    solver.solve(lineFitting);
 
     // Get result
     double res_k,res_b;

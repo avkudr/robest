@@ -50,8 +50,8 @@ private:
     double determinantFromDataPoints(const std::vector<int> & samplesIdx);
 
     Point3Dvector points;
-    double cx;
-    double cy;
-    double cz;
-    double r;
+    double cx = 0;
+    double cy = 0;
+    double cz = 0;
+    double r  = 0;
 };
