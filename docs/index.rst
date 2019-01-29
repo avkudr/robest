@@ -29,19 +29,16 @@ What is *robest*?
    :alt: set of 2D points
    :align: center	
 
-
-
-
 Why *robest*?
 -------------
 
-There are at least three main reasons why robest:
+There are at least three main reasons why you should take a look at **robest**:
 
-- First, the library is very light, and it makes wider the possible limits of its use.
+- First, the library is very lightweight - only 1 file. This allows you to quickly install and use it.
 
-- Secondly, due to its structure, robest is easy customizable: easy to add new estimation problem or new estimation algorithm. Follow our tutorial for more info
+- Secondly, due to its structure, robest is easyly extendable and customizable: it is easy to add new estimation problems and/or new estimation algorithm. Just follow our tutorial to do it!
 
-- Finally, the **robest** library is very compact - only 1 file. This allows you to quickly install it.
+- Finally, since there is not a lot of code, with robest you can learn how the algorithms of RANSAC family work.
 
 Cite Us
 =======

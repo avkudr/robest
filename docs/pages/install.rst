@@ -2,7 +2,7 @@
 Install
 ==================================
 
-There is no installation procedure, you just need to clone the repository or download a zip file, and then add the necessary file to your project.
+As there is no special installation procedure, you just need to clone the repository or download a zip file, and then add the necessary file to your project.
 
 - Cloning repository for Linux systems:
 

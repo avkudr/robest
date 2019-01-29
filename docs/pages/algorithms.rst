@@ -26,7 +26,7 @@ Other Rabust estimators, such as MSAC or MLESAC, follow the similaire steps, the
 RANSAC
 ======
 
-The RANSAC (Random Sample Consensus) seeks to maximize the inliers ratio. The cost function is given as:
+The RANSAC (Random Sample Consensus) seeks to maximize the inliers ratio (in other words, minimize the number of outliers). The cost function is given as:
 
 .. math:: 
 
@@ -34,7 +34,7 @@ The RANSAC (Random Sample Consensus) seeks to maximize the inliers ratio. The co
    \mathcal{C}_{RANSAC}(\mathcal{e}_i) =
    \begin{cases}
       0 & \text{$\varepsilon_{i}^2 < \mathcal{t}^2$} \\
-      const & \text{otherwise}
+      1 & \text{otherwise}
    \end{cases}
    \end{equation}
 
@@ -50,7 +50,7 @@ LMedS algorithm has the cost function which is defined as follows:
 
    \mathcal{C}_{LMedS} = median(\mathcal{E}^2)
 
-which shows that the goal of the algorithm is to minimize the median of errors. In order to give a reliable estimate,
+Actually once the model is estimated, we calculate the errors for all sample points and put them in an array. The median of this array is `\mathcal{C}_{LMedS}`. So, the goal of the algorithm is to minimize the median of errors. In order to give a reliable estimate,
 the sample set must contain at least 50% of inliers, i.e. correct points. Remark, that the cost is estimated from 
 the vector of errors which is no longer true for the remaining algorithms. For them, the cost is estimated for every data point
 separately, while the global cost is obtained as the sum of this costs:

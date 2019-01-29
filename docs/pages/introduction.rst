@@ -2,14 +2,14 @@
 Introduction
 ==================================
 
-At present, there are a large number of data estimation methods, but some of them
-cannot guarantee a robustness of the results obtained. The main reason is the presence of outliers or mismatches in the data.
-Despite this, among all these methods we can distinguish a family of solutions regrouped by the name of robust estimators
+At present, there is a large number of data estimation methods, but some of them
+cannot guarantee a robustness of the obtained results. The main reason for inprecision is the presence of outliers or mismatches in the input data.
+However, there is a family of algorithms working with such data: they are regrouped by the name of robust estimators
 such as Least Median of Squared (LMedS) or RANSAC.
 
-Consider the work of the method RANSAC on the example of the circle fitting.
+For example, below you can see the result of circle fitting using RANSAC applied to noisy data. Let's try to describe the algorithm step by step:
 
-- *Step I*: 
+- *Step 1*: 
    
    The input of the algorithm is a quiet corrupted set of 2D points. The task is to define a circle model based on this set and avoid the effects of outliers.
 
@@ -20,9 +20,11 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :alt: step 1
       :align: center
 
-- *Step II*:
+- *Step 2*:
 
-   In the next step, the algorithm estimate the data. He choose randomly three points (P\ :sub:`1`, P\ :sub:`2` and P\ :sub:`3`) and build a circle model on their basis.
+   In the next step, the algorithm estimates the model from a minimal needed data. 
+   In case of circle, the minimum data needed to find its model (center coordinates and radius) is a set of three points. 
+   Assume the algorithm chooses randomly three points (P\ :sub:`1`, P\ :sub:`2` and P\ :sub:`3`) and build a circle model on their basis.
 
    .. image:: images/exRANSACstep2.jpg
       :width: 556px
@@ -31,14 +33,11 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :alt: step 2
       :align: center
 
-- *Step III*:
+- *Step 3*:
 
-   The next step in the algorithm is to calculate the loss function based on a predetermined threshold value.
-   First, for each point in the set, an error is calculated; this error is the calculation of the shortest distance
-   between the point and the surface of the constructed circle model. If the square of the error is less than or 
-   equal to the square of the threshold value, then the point is classified as an inlier, if not then the point is considered an outlier.
-
-   The best estimation is the one at which the number of inliers is maximum.
+   The next step consists in calculation the loss function. In order words, we need to undestand how well this model fits all of the data.
+   So, for each point in the set, an error is calculated: here we take the shortest distance between the point and the circle defined by the model. 
+   If the error is below some predefined threshold value, then the point is classified as an inlier. Otherwise the point is considered an outlier.
 
    .. image:: images/exRANSACstep3.jpg
       :width: 556px
@@ -47,10 +46,13 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :alt: step 3
       :align: center
 
-- *Step IV*:
+- *The end*:
 
-   All steps of the algorithm are repeated until the number of iterations reaches the specified value. 
-   As a result, the algorithm will return the best selected model parameters.
+   Next, steps 2 and 3 are repeated multiple time in order to find the best model. For example, in case of RANSAC the best model 
+   is the model that has the biggest number of inliers. 
+   
+   As a result, the algorithm will return the best selected model parameters. For a more detailed description of robust estimators 
+   please refer to Algorithms section. 
 
    .. image:: images/exRANSACstep4.jpg
       :width: 556px
@@ -58,6 +60,8 @@ Consider the work of the method RANSAC on the example of the circle fitting.
       :scale: 75 %
       :alt: step 4
       :align: center
+
+
 
 
 
