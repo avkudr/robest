@@ -4,7 +4,7 @@ project(robest CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
     set(CMAKE_CXX_FLAGS         "-Wall -Wno-unknown-pragmas -Wno-sign-compare -Woverloaded-virtual -Wwrite-strings -Wno-unused")
@@ -38,6 +38,13 @@ endforeach()
 
 add_library(googletest ${GOOGLETEST_SOURCES})
 
+find_package(OpenMP QUIET) # Find the package
+if (OpenMP_FOUND)
+    message("Enabling OpenMP support")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    target_link_libraries(${PROJECT_NAME} ${OpenMP_CXX_LIBRARIES}) # Link against it for C++
+endif()
+
 add_executable(
     unit_tests
     tests/LineFitting/LineFitting.hpp
@@ -62,7 +69,6 @@ target_link_libraries(
     unit_tests
     googletest
     robest
-    pthread
     )
 
 include(CTest)

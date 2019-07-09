@@ -10,20 +10,22 @@ void generateLineData(
         const double noiseVar,
         std::vector<double> & x, std::vector<double> & y)
 {
+    bool addNoise = noiseVar != 0 ;
     std::default_random_engine generator;
-    std::normal_distribution<double> distribution(0,noiseVar);
+    std::normal_distribution<double> distribution(0,1);
+    if (addNoise) {
+        distribution = std::normal_distribution<double>(0,noiseVar);
+    }
 
     for (int i = 0; i < 50; i++)
     {
-        double xnoise = distribution(generator);
-        double ynoise = distribution(generator);
+        double xnoise = addNoise ? distribution(generator) : 0;
+        double ynoise = addNoise ? distribution(generator) : 0;
         x.push_back((double)i);
         y.push_back(k*x[i] + b);
 
-        if (noiseVar != 0){
-            x[i] += xnoise;
-            y[i] += ynoise;
-        }
+        x[i] += xnoise;
+        y[i] += ynoise;
     }
 }
 
@@ -89,7 +91,7 @@ TEST(LineFitting, smallNoise)
     std::vector<double> y;
     double k = 1.0;
     double b = 2.5;
-    double noise = 0.001;
+    double noise = 0.0001;
     generateLineData(k,b,noise,x,y);
 
     // Define estimation problem

@@ -14,21 +14,25 @@ void generateSphereData(
         std::vector<double> & x, std::vector<double> & y, std::vector<double> & z)
 {
     std::default_random_engine generator;
-    std::normal_distribution<double> distribution(0,noiseVar);
+    std::normal_distribution<double> distribution(0,1);
+
+    bool addNoise = noiseVar != 0 ;
+    if (addNoise) {
+        distribution = std::normal_distribution<double>(0,noiseVar);
+    }
+
 
     for(double i = 0 ; i < 3.1415*2.0 ; i += 3.1415/18.0){
-        double xnoise = distribution(generator);
-        double ynoise = distribution(generator);
-        double znoise = distribution(generator);
+        double xnoise = addNoise ? distribution(generator) : 0;
+        double ynoise = addNoise ? distribution(generator) : 0;
+        double znoise = addNoise ? distribution(generator) : 0;
         x.push_back(r*cos(double(i))*sin(double(i)) + cx); //cx
         y.push_back(r*sin(double(i))*sin(double(i)) + cy); //cy
         z.push_back(r*cos(double(i)) + cz); //cz
 
-        if (noiseVar != 0){
-            x[i] += xnoise;
-            y[i] += ynoise;
-            z[i] += znoise;
-        }
+        x[i] += xnoise;
+        y[i] += ynoise;
+        z[i] += znoise;
     }
 }
 
@@ -175,7 +179,7 @@ TEST(SphereFitting, isDegenerate)
   
     //sample 2
     std::vector<double> x2 = {0,1,0,-1};
-    std::vector<double> y2 = {1,0.-1,0};
+    std::vector<double> y2 = {1,0,-1,0};
     std::vector<double> z2 = {0,0,0,0};
     sphereFitting->setData(x2,y2,z2);
     ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
@@ -191,7 +195,7 @@ TEST(SphereFitting, isDegenerate)
     //sample 4
     std::vector<double> x4 = {0,0,0,0};
     std::vector<double> y4 = {0,1,0,-1};
-    std::vector<double> z4 = {1,0.-1,0};
+    std::vector<double> z4 = {1,0,-1,0};
     sphereFitting->setData(x4,y4,z4);
     ASSERT_TRUE(sphereFitting->isDegenerate({0,1,2,3}));
    

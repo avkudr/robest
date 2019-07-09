@@ -26,7 +26,12 @@ void generateData(
     d = d / norm;
 
     std::default_random_engine generator;
-    std::normal_distribution<double> distribution(0,noiseVar);
+    std::normal_distribution<double> distribution(0,1);
+
+    bool addNoise = noiseVar != 0 ;
+    if (addNoise) {
+        distribution = std::normal_distribution<double>(0,noiseVar);
+    }
 
     for(int i = 0; i < 10; i++){
         for(int j = 0; j < 10; j++){

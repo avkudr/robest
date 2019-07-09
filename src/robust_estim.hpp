@@ -80,11 +80,11 @@ class AbstractEstimator
         return idx;
     }
 
-    int calculateIterationsNb(const int dataSize, const float alpha = 0.99, const float gamma = 0.80)
+    int calculateIterationsNb(const int dataSize, const float alpha = 0.99f, const float gamma = 0.80f)
     {
         assert(dataSize > 0 && "The size of input data must be > 0");
-        assert((alpha > 0.0 && alpha <  1.0) && "Accepted value of success probability (aplha) is in range (0,1)");
-        assert((gamma > 0.0 && gamma <= 1.0) && "Accepted value of inlier's ratio (gamma) is in range (0,1]");
+        assert((alpha > 0.0f && alpha <  1.0f) && "Accepted value of success probability (aplha) is in range (0,1)");
+        assert((gamma > 0.0f && gamma <= 1.0f) && "Accepted value of inlier's ratio (gamma) is in range (0,1]");
 
         if (gamma == 1.0)
             return 1;
@@ -111,9 +111,12 @@ class AbstractEstimator
         {
             double error = problem->estimErrorForSample(j);
             
-            if (error * error < thres * thres)
+            #pragma omp critical
             {
-                inliersIdx.push_back(j);
+                if (error * error < thres * thres)
+                {
+                    inliersIdx.push_back(j);
+                }
             }
         }
         this->inliersFraction = (double)(inliersIdx.size()) / (double)(totalNbSamples);
@@ -142,7 +145,7 @@ class RANSAC : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
-        #pragma omp parallel for nowait
+        #pragma omp parallel for
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -195,7 +198,7 @@ class MSAC : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
-        #pragma omp parallel for nowait
+        #pragma omp parallel for
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -267,7 +270,7 @@ class LMedS : public AbstractEstimator
         if (nbIter <= 0)
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
-        #pragma omp parallel for nowait
+        #pragma omp parallel for
         for (int i = 0; i < nbIter; i++)
         {
             std::vector<int> indices = randomSampleIdx();

@@ -13,18 +13,21 @@ void generateCircleData(
         std::vector<double> & x, std::vector<double> & y)
 {
     std::default_random_engine generator;
-    std::normal_distribution<double> distribution(0,noiseVar);
+    std::normal_distribution<double> distribution(0,1);
+
+    bool addNoise = noiseVar != 0 ;
+    if (addNoise) {
+        distribution = std::normal_distribution<double>(0,noiseVar);
+    }
 
     for(double i = 0 ; i < 3.1415*2.0 ; i += 3.1415/18.0){
-        double xnoise = distribution(generator);
-        double ynoise = distribution(generator);
+        double xnoise = addNoise ? distribution(generator) : 0;
+        double ynoise = addNoise ? distribution(generator) : 0;
         x.push_back(r*cos(double(i)) + cx); //cx
         y.push_back(r*sin(double(i)) + cy); //cy
 
-        if (noiseVar != 0){
-            x[i] += xnoise;
-            y[i] += ynoise;
-        }
+        x[i] += xnoise;
+        y[i] += ynoise;
     }
 }
 
