@@ -12,9 +12,7 @@ PlaneFittingProblem::~PlaneFittingProblem(){
 
 void PlaneFittingProblem::setData(std::vector<double> & x, std::vector<double> & y,std::vector<double> & z){
 
-    Point3d data;
     points.clear();
-
     for (auto i = 0; i < x.size(); i++){
         points.push_back(Point3d{x[i],y[i],z[i]});
     }
