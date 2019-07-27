@@ -19,12 +19,38 @@
 #include <iterator>
 #include <limits>
 #include <memory>
+#include <queue>
 #include <assert.h>
 
 #include <omp.h>
 
 namespace robest
 {
+
+template<typename T>
+class MedianFinder {
+    std::priority_queue<T> lo;                                    // max heap
+    std::priority_queue<T, std::vector<T>, std::greater<T>> hi;   // min heap
+
+public:
+    void add(T num)
+    {
+        lo.push(num);
+
+        hi.push(lo.top());
+        lo.pop();
+
+        if (lo.size() < hi.size()) {
+            lo.push(hi.top());
+            hi.pop();
+        }
+    }
+
+    double median()
+    {
+        return lo.size() > hi.size() ? (double) lo.top() : (lo.top() + hi.top()) * 0.5;
+    }
+};
 
 class EstimationProblem
 {
@@ -86,11 +112,11 @@ class AbstractEstimator
         assert((alpha > 0.0f && alpha <  1.0f) && "Accepted value of success probability (aplha) is in range (0,1)");
         assert((gamma > 0.0f && gamma <= 1.0f) && "Accepted value of inlier's ratio (gamma) is in range (0,1]");
 
-        if (gamma == 1.0)
+        if (gamma == 1.0f)
             return 1;
 
         // Counting the number of iteration
-        long long int nbIter = 1 + std::log(1 - alpha) / std::log(1 - std::pow(gamma, dataSize));
+        int nbIter = 1 + int(std::log(1 - alpha) / std::log(1 - std::pow(gamma, dataSize)));
         if ( nbIter < 0 || nbIter > 50000) nbIter = 50000;
 
         assert(nbIter > 0 && "Number of interations must be > 0: check solver params or define nbIter manually");
@@ -107,7 +133,7 @@ class AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
         inliersIdx.clear();
         #pragma omp parallel for
-        for (int j = 0; j < totalNbSamples; j++)
+        for (int j = 0; j < totalNbSamples; ++j)
         {
             double error = problem->estimErrorForSample(j);
             
@@ -146,7 +172,7 @@ class RANSAC : public AbstractEstimator
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         #pragma omp parallel for
-        for (int i = 0; i < nbIter; i++)
+        for (int i = 0; i < nbIter; ++i)
         {
             std::vector<int> indices = randomSampleIdx();
 
@@ -154,7 +180,7 @@ class RANSAC : public AbstractEstimator
 
             //getInliersNb
             int nbInliers = 0;
-            for (int j = 0; j < totalNbSamples; j++)
+            for (int j = 0; j < totalNbSamples; ++j)
             {
                 double error = problem->estimErrorForSample(j);
                 error = error * error;
@@ -199,14 +225,14 @@ class MSAC : public AbstractEstimator
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         #pragma omp parallel for
-        for (int i = 0; i < nbIter; i++)
+        for (int i = 0; i < nbIter; ++i)
         {
             std::vector<int> indices = randomSampleIdx();
             problem->estimModelFromSamples(indices);
 
             double sumSqErr = 0;
             int nbInliers = 0;
-            for (int j = 0; j < totalNbSamples; j++)
+            for (int j = 0; j < totalNbSamples; ++j)
             {
                 double error = problem->estimErrorForSample(j);
                 if (error * error < thres * thres)
@@ -245,21 +271,7 @@ class LMedS : public AbstractEstimator
   public:
     LMedS()
     {
-        med = 1000000.0;
-    }
-
-    template <typename T>
-    double median(std::vector<T> &v)
-    {
-        std::sort(v.begin(), v.end());
-        if (v.size() % 2 == 0)
-        {
-            return (double)(v[v.size() / 2 - 1] + v[v.size() / 2]) / 2;
-        }
-        else
-        {
-            return v[v.size() / 2];
-        }
+        med = std::numeric_limits<double>::max();
     }
 
     void solve(std::shared_ptr<EstimationProblem> pb, double thres = 0.1, int nbIter = -1)
@@ -271,20 +283,20 @@ class LMedS : public AbstractEstimator
             nbIter = this->calculateIterationsNb(totalNbSamples);
 
         #pragma omp parallel for
-        for (int i = 0; i < nbIter; i++)
+        for (int i = 0; i < nbIter; ++i)
         {
+            MedianFinder<double> errorsVec;
             std::vector<int> indices = randomSampleIdx();
 
             problem->estimModelFromSamples(indices);
 
-            std::vector<double> errorsVec(totalNbSamples);
-            for (int j = 0; j < problem->getTotalNbSamples(); j++)
+            for (int j = 0; j < problem->getTotalNbSamples(); ++j)
             {
                 double error = problem->estimErrorForSample(j);
                 //errorsVec[j] = error; // error must be squared!
-                errorsVec[j] = error * error; // error must be squared!
+                errorsVec.add(error * error);
             }
-            double med = median(errorsVec);
+            double med = errorsVec.median();
 
             #pragma omp critical
             {

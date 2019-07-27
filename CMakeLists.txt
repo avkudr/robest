@@ -17,7 +17,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/src
 )
 
-add_library(robest INTERFACE)
+add_library(robest)
 target_include_directories(robest INTERFACE src/)
 
 set(GOOGLETEST_ROOT 3rdparty/googletest/googletest CACHE STRING "Google Test source root")
