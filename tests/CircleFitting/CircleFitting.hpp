@@ -42,7 +42,23 @@ public:
         res_r  = this->r;
     }
 
-    bool isDegenerate(const std::vector<int> & samplesIdx);
+    inline bool isDegenerate(const std::vector<int> & samplesIdx)
+    {
+        Point2d & P = points[samplesIdx[0]];
+        Point2d & V = points[samplesIdx[1]];
+        Point2d & K = points[samplesIdx[2]];
+
+        // verify that points P, V and K are not at the line -> verify that PV and PK are colinear:
+
+        //1. calculate the directing coefficient of the line PV
+        double f = (V.y-P.y)/(V.x-P.x);
+
+        //2. calculate the directing coefficient of the line PK
+        double h = (K.y-P.y)/(K.x-P.x);
+
+        //3. PV and PK Are colineaire if and only if f = h
+        return ( f - h < 1e-3 );
+    }
 
 private:
 
