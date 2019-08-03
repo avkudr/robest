@@ -13,7 +13,7 @@ After a number of iterations, the model with the best score is retained as the s
    :alt: flowchart of Robest
    :align: center
 
-Other Rabust estimators, such as MSAC or MLESAC, follow the similaire steps, the main difference between the methods is thier loss function.
+Other Robust estimators, such as MSAC or MLESAC, follow the similaire steps, the main difference between the methods is thier loss function.
 
 .. image:: images/lossFuncEx.jpg
    :width: 306px

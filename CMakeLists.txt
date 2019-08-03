@@ -42,7 +42,7 @@ find_package(OpenMP QUIET) # Find the package
 if (OpenMP_FOUND)
     message("Enabling OpenMP support")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    target_link_libraries(${PROJECT_NAME} ${OpenMP_CXX_LIBRARIES}) # Link against it for C++
+    target_link_libraries(${PROJECT_NAME} INTERFACE ${OpenMP_CXX_LIBRARIES}) # Link against it for C++
 endif()
 
 add_executable(
