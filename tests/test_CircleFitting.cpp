@@ -10,6 +10,7 @@ void generateCircleData(
         const double cy,
         const double r,
         const double noiseVar,
+        const double outliersRatio,
         std::vector<double> & x, std::vector<double> & y)
 {
     std::default_random_engine generator;
@@ -20,14 +21,20 @@ void generateCircleData(
         distribution = std::normal_distribution<double>(0,noiseVar);
     }
 
-    for(double i = 0 ; i < 3.1415*2.0 ; i += 3.1415/18.0){
+    int pointNumber = 50;
+    int outlierNumber = (int)(pointNumber*outliersRatio);
+
+    for(int i = 0 ; i < pointNumber ; i += 1){
         double xnoise = addNoise ? distribution(generator) : 0;
         double ynoise = addNoise ? distribution(generator) : 0;
-        x.push_back(r*cos(double(i)) + cx); //cx
-        y.push_back(r*sin(double(i)) + cy); //cy
+        x.push_back(r*cos((double)i*(0.12566)) + cx); //cx
+        y.push_back(r*sin((double)i*(0.12566)) + cy); //cy
 
-        x[i] += xnoise;
-        y[i] += ynoise;
+        if(i < outlierNumber)
+        {
+            x[i] += xnoise;
+            y[i] += ynoise;
+        }
     }
 }
 
@@ -40,8 +47,9 @@ TEST(CircleFitting, idealCase)
     double cy = 0;
     double radius = 1; //circle radius
     double noiseVar = 0.0;
+    double outliersRatio = 0.0;
 
-    generateCircleData(cx,cy,radius,noiseVar,x,y);
+    generateCircleData(cx,cy,radius,noiseVar,outliersRatio,x,y);
 
     auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
@@ -66,8 +74,9 @@ TEST(CircleFitting, idealCase2)
     double cy = 8.10;
     double radius = 26.03; //circle radius
     double noiseVar = 0.0;
+    double outliersRatio = 0.0;
 
-    generateCircleData(cx,cy,radius,noiseVar,x,y);
+    generateCircleData(cx,cy,radius,noiseVar,outliersRatio,x,y);
 
     auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
@@ -94,14 +103,16 @@ TEST(CircleFitting, smallNoise)
     double cy = 1.58452;
     double radius = 13.2548; //circle radius
     double noiseVar = 0.001;
+    double outliersRatio = 0.3;
 
-    generateCircleData(cx,cy,radius,noiseVar,x,y);
+    generateCircleData(cx,cy,radius,noiseVar,outliersRatio,x,y);
 
     auto circleFitting = std::make_shared<CircleFittingProblem>();
     circleFitting->setData(x,y);
 
     robest::LMedS solver;
-    solver.solve(circleFitting);
+    auto nbIter = solver.calculateIterationsNb(circleFitting->getNbMinSamples(),0.99,(1. - outliersRatio));
+    solver.solve(circleFitting,0.1,nbIter);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
@@ -120,7 +131,7 @@ TEST(CircleFitting, outliers)
     circleFitting->setData(x,y);
 
     robest::LMedS solver;
-    auto nbIter = solver.calculateIterationsNb(x.size(),0.99,0.45);
+    auto nbIter = solver.calculateIterationsNb(circleFitting->getNbMinSamples(),0.99,0.45);
     solver.solve(circleFitting, 0.1, nbIter);
 
     double res_cx,res_cy,res_r;

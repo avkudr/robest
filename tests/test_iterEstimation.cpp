@@ -56,6 +56,8 @@ TEST(iterEstimationDeathTest, wrongInputDataSize)
     EXPECT_DEATH(solver.calculateIterationsNb(dataSize, alpha, gamma), msg);
 }
 */
+
+
 TEST(checkIterNbResults, valuesIterationsNb)
 {
     robest::MSAC solver;

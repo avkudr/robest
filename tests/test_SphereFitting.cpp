@@ -11,6 +11,7 @@ void generateSphereData(
         const double cz,
         const double r,
         const double noiseVar,
+        const double outliersRatio,
         std::vector<double> & x, std::vector<double> & y, std::vector<double> & z)
 {
     std::default_random_engine generator;
@@ -21,18 +22,24 @@ void generateSphereData(
         distribution = std::normal_distribution<double>(0,noiseVar);
     }
 
+    int pointNumber = 50;
+    int outlierNumber = (int)(pointNumber*outliersRatio);
 
-    for(double i = 0 ; i < 3.1415*2.0 ; i += 3.1415/18.0){
-        double xnoise = addNoise ? distribution(generator) : 0;
-        double ynoise = addNoise ? distribution(generator) : 0;
-        double znoise = addNoise ? distribution(generator) : 0;
-        x.push_back(r*cos(double(i))*sin(double(i)) + cx); //cx
-        y.push_back(r*sin(double(i))*sin(double(i)) + cy); //cy
-        z.push_back(r*cos(double(i)) + cz); //cz
 
-        x[i] += xnoise;
-        y[i] += ynoise;
-        z[i] += znoise;
+    for(int i = 0 ; i < pointNumber ; i += 1){
+        double xnoise = addNoise ? distribution(generator) : 0.0;
+        double ynoise = addNoise ? distribution(generator) : 0.0;
+        double znoise = addNoise ? distribution(generator) : 0.0;
+        x.push_back(r*cos(double(i)*(0.12566))*sin(double(i)*(0.12566)) + cx); //cx
+        y.push_back(r*sin(double(i)*(0.12566))*sin(double(i)*(0.12566)) + cy); //cy
+        z.push_back(r*cos(double(i)*(0.12566)) + cz); //cz
+
+        if(i < outlierNumber)
+        {
+            x[i] += xnoise;
+            y[i] += ynoise;
+            z[i] += znoise;
+        }
     }
 }
 
@@ -114,9 +121,10 @@ TEST(SphereFitting, smallNoise)
     double cz = -1.96731;
     double radius = 4.54854; //sphere radius
     double noiseVar = 0.001;
+    double outliersRatio = 0.2;
 
     // generate dataset
-    generateSphereData(cx,cy,cz,radius,noiseVar,x,y,z);
+    generateSphereData(cx,cy,cz,radius,noiseVar,outliersRatio,x,y,z);
 
     sphereFitting->setData(x,y,z);
 
@@ -127,7 +135,7 @@ TEST(SphereFitting, smallNoise)
     // Get results
     double res_cx,res_cy, res_cz,res_r;
     sphereFitting->getResult(res_cx, res_cy, res_cz, res_r);
-     
+
     ASSERT_NEAR(    cx, res_cx, 1.0e-3);
     ASSERT_NEAR(    cy, res_cy, 1.0e-3);
     ASSERT_NEAR(    cz, res_cz, 1.0e-3);
@@ -140,9 +148,9 @@ TEST(SphereFitting, outliers)
     auto sphereFitting = std::make_shared<SphereFittingProblem>();
 
     // Define dataset
-    std::vector<double> x = {3, 8,  -2, 3,  3,  3,  16, -24, 0};
-    std::vector<double> y = {3, -2, -2, -7, -2, -2, 12, 16, -15, 0};
-    std::vector<double> z = {7, 7,  7,  7,  2,  12, -2, 3,  0};
+    std::vector<double> x = {5.5, 8,  -2, 3,  2.99,  3,  16, -24, 0};
+    std::vector<double> y = {0.5, -2, -2, -7, -2, -2, 12, 16, -15, 0};
+    std::vector<double> z = {10.53553, 7,  7,  7,  2,  12, -2, 3,  0};
 
     double cx = 3; // sphere center C:(cx,cy,cz)
     double cy = -2;

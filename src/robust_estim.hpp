@@ -106,9 +106,9 @@ class AbstractEstimator
         return idx;
     }
 
-    int calculateIterationsNb(const int dataSize, const float alpha = 0.99f, const float gamma = 0.80f)
+    int calculateIterationsNb(const int batchSize, const float alpha = 0.99f, const float gamma = 0.80f)
     {
-        assert(dataSize > 0 && "The size of input data must be > 0");
+        assert(batchSize > 0 && "The size of input data must be > 0");
         assert((alpha > 0.0f && alpha <  1.0f) && "Accepted value of success probability (aplha) is in range (0,1)");
         assert((gamma > 0.0f && gamma <= 1.0f) && "Accepted value of inlier's ratio (gamma) is in range (0,1]");
 
@@ -116,7 +116,7 @@ class AbstractEstimator
             return 1;
 
         // Counting the number of iteration
-        int nbIter = 1 + int(std::log(1 - alpha) / std::log(1 - std::pow(gamma, dataSize)));
+        int nbIter = 1 + int(std::log(1 - alpha) / std::log(1 - std::pow(gamma, batchSize)));
         if ( nbIter < 0 || nbIter > 50000) nbIter = 50000;
 
         assert(nbIter > 0 && "Number of interations must be > 0: check solver params or define nbIter manually");
@@ -139,7 +139,7 @@ class AbstractEstimator
             
             #pragma omp critical
             {
-                if (error * error < thres * thres)
+                if ((error * error) < (thres * thres))
                 {
                     inliersIdx.push_back(j);
                 }
@@ -169,7 +169,7 @@ class RANSAC : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(totalNbSamples);
+            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
 
         #pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)
@@ -184,6 +184,7 @@ class RANSAC : public AbstractEstimator
             {
                 double error = problem->estimErrorForSample(j);
                 error = error * error;
+
                 if (std::fabs(error) < thres)
                 {
                     nbInliers++;
@@ -192,7 +193,8 @@ class RANSAC : public AbstractEstimator
 
             #pragma omp critical
             {
-                double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
+                double inliersFraction = (double)(nbInliers) / (double)(totalNbSamples);
+                
                 if (inliersFraction > this->inliersFraction)
                 {
                     this->inliersFraction = inliersFraction;
@@ -222,7 +224,7 @@ class MSAC : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(totalNbSamples);
+            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
 
         #pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)
@@ -235,6 +237,7 @@ class MSAC : public AbstractEstimator
             for (int j = 0; j < totalNbSamples; ++j)
             {
                 double error = problem->estimErrorForSample(j);
+
                 if (error * error < thres * thres)
                 {
                     sumSqErr += error * error;
@@ -249,6 +252,7 @@ class MSAC : public AbstractEstimator
             #pragma omp critical
             {
                 double inliersFraction = (double)(nbInliers) / (double)(problem->getTotalNbSamples());
+
                 if (sumSqErr < this->sumSqErr )
                 {
                     this->inliersFraction = inliersFraction;
@@ -257,7 +261,7 @@ class MSAC : public AbstractEstimator
                 }
             }
         }
-        
+     
         problem->estimModelFromSamples(bestIdxSet);
         getInliers(thres);
         //problem->estimModelFromSamples(inliersIdx);
@@ -280,7 +284,7 @@ class LMedS : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(totalNbSamples);
+            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
 
         #pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)

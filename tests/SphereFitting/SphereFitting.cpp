@@ -45,26 +45,26 @@ inline void SphereFittingProblem::estimModelFromSamples(const std::vector<int> &
         double f4 = std::pow(x4,2)+std::pow(y4,2)+std::pow(z4,2);
 
         //calculation of the centre of the sphere
-        this->cx = (f3*(4*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2)))\
-                    - f4*(4*(y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2)))\
-                    - f2*(4*(y1*(z3 - z4) + y3*(z4 - z1) + y4*(z1 - z3)))\
-                    + f1*(4*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3)))) / D;
+        this->cx = (f3*(4.0*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2)))\
+                  - f4*(4.0*(y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2)))\
+                  - f2*(4.0*(y1*(z3 - z4) + y3*(z4 - z1) + y4*(z1 - z3)))\
+                  + f1*(4.0*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3)))) / D;
        
-        this->cy = (f4*(4*(x1*(z2 - z3) + x2*(z3 - z1) + x3*(z1 - z2)))\
-                    - f3*(4*(x1*(z2 - z4) + x2*(z4 - z1) + x4*(z1 - z2)))\
-                    + f2*(4*(x1*(z3 - z4) + x3*(z4 - z1) + x4*(z1 - z3)))\
-                    - f1*(4*(x2*(z3 - z4) + x3*(z4 - z2) + x4*(z2 - z3)))) / D;
+        this->cy = (f4*(4.0*(x1*(z2 - z3) + x2*(z3 - z1) + x3*(z1 - z2)))\
+                  - f3*(4.0*(x1*(z2 - z4) + x2*(z4 - z1) + x4*(z1 - z2)))\
+                  + f2*(4.0*(x1*(z3 - z4) + x3*(z4 - z1) + x4*(z1 - z3)))\
+                  - f1*(4.0*(x2*(z3 - z4) + x3*(z4 - z2) + x4*(z2 - z3)))) / D;
         
-        this->cz = (f3*(4*(x1*(y2 - y4) + x2*(y4 - y1) + x4*(y1 - y2)))\
-                    - f4*(4*(x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2)))\
-                    - f2*(4*(x1*(y3 - y4) + x3*(y4 - y1) + x4*(y1 - y3)))\
-                    + f1*(4*(x2*(y3 - y4) + x3*(y4 - y2) + x4*(y2 - y3)))) / D;
+        this->cz = (f3*(4.0*(x1*(y2 - y4) + x2*(y4 - y1) + x4*(y1 - y2)))\
+                  - f4*(4.0*(x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2)))\
+                  - f2*(4.0*(x1*(y3 - y4) + x3*(y4 - y1) + x4*(y1 - y3)))\
+                  + f1*(4.0*(x2*(y3 - y4) + x3*(y4 - y2) + x4*(y2 - y3)))) / D;
         
         //calculation of the radius of the sphere
-        double co = (f4*(8*(x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1)))\
-                    - f3*(8*(x1*(y2*z4 - y4*z2) + x2*(y4*z1 - y1*z4) + x4*(y1*z2 - y2*z1)))\
-                    + f2*(8*(x1*(y3*z4 - y4*z3) + x3*(y4*z1 - y1*z4) + x4*(y1*z3 - y3*z1)))\
-                    - f1*(8*(x2*(y3*z4 - y4*z3) + x3*(y4*z2 - y2*z4) + x4*(y2*z3 - y3*z2)))) / D;
+        double co = (f4*(8.0*(x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1)))\
+                   - f3*(8.0*(x1*(y2*z4 - y4*z2) + x2*(y4*z1 - y1*z4) + x4*(y1*z2 - y2*z1)))\
+                   + f2*(8.0*(x1*(y3*z4 - y4*z3) + x3*(y4*z1 - y1*z4) + x4*(y1*z3 - y3*z1)))\
+                   - f1*(8.0*(x2*(y3*z4 - y4*z3) + x3*(y4*z2 - y2*z4) + x4*(y2*z3 - y3*z2)))) / D;
         
         this->r = std::sqrt(std::pow(this->cx,2) + std::pow(this->cy,2) + std::pow(this->cz,2) + co);
     } 
@@ -77,11 +77,11 @@ inline double SphereFittingProblem::determinantFromDataPoints(const std::vector<
     const auto & x1 = P[samplesIdx[0]].x, x2 = P[samplesIdx[1]].x, x3 = P[samplesIdx[2]].x, x4 = P[samplesIdx[3]].x;
     const auto & y1 = P[samplesIdx[0]].y, y2 = P[samplesIdx[1]].y, y3 = P[samplesIdx[2]].y, y4 = P[samplesIdx[3]].y;
     const auto & z1 = P[samplesIdx[0]].z, z2 = P[samplesIdx[1]].z, z3 = P[samplesIdx[2]].z, z4 = P[samplesIdx[3]].z;
-    
-    return  8*(x1*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3))\
-             + x2*(y1*(z4 - z3) + y3*(z1 - z4) + y4*(z3 - z1))\
-             + x3*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2))\
-             + x4*(y1*(z3 - z2) + y2*(z1 - z3) + y3*(z2 - z1)));
+
+    return  8.0*(x1*(y2*(z3 - z4) + y3*(z4 - z2) + y4*(z2 - z3))\
+               + x2*(y1*(z4 - z3) + y3*(z1 - z4) + y4*(z3 - z1))\
+               + x3*(y1*(z2 - z4) + y2*(z4 - z1) + y4*(z1 - z2))\
+               + x4*(y1*(z3 - z2) + y2*(z1 - z3) + y3*(z2 - z1)));
 }
 
 bool SphereFittingProblem::isDegenerate(const std::vector<int> & samplesIdx)
