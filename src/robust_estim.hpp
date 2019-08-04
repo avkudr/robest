@@ -116,7 +116,7 @@ class AbstractEstimator
             return 1;
 
         // Counting the number of iteration
-        int nbIter = 1 + int(std::log(1 - alpha) / std::log(1 - std::pow(gamma, batchSize)));
+        int nbIter = 1 + int(std::log(1.0 - alpha) / std::log(1.0 - std::pow(gamma, batchSize)));
         if ( nbIter < 0 || nbIter > 50000) nbIter = 50000;
 
         assert(nbIter > 0 && "Number of interations must be > 0: check solver params or define nbIter manually");
@@ -169,7 +169,7 @@ class RANSAC : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
+            nbIter = this->calculateIterationsNb(problem->getTotalNbSamples());
 
         #pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)
@@ -224,9 +224,9 @@ class MSAC : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
+            nbIter = this->calculateIterationsNb(problem->getTotalNbSamples());
 
-        #pragma omp parallel for
+        //#pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)
         {
             std::vector<int> indices = randomSampleIdx();
@@ -284,7 +284,7 @@ class LMedS : public AbstractEstimator
         int totalNbSamples = problem->getTotalNbSamples();
 
         if (nbIter <= 0)
-            nbIter = this->calculateIterationsNb(problem->getNbMinSamples());
+            nbIter = this->calculateIterationsNb(problem->getTotalNbSamples());
 
         #pragma omp parallel for
         for (int i = 0; i < nbIter; ++i)

@@ -25,7 +25,7 @@ void LineFittingProblem::setData(std::vector<double> & x, std::vector<double> & 
 inline double LineFittingProblem::estimErrorForSample(int i)
 {
     //distance point to line
-    Point2d & p = points[i];
+    const Point2d & p = points[i];
     return std::fabs(a*p.x - p.y + b) / sqrt(a*a + 1); // distance line-point
 }
 

@@ -19,18 +19,21 @@ void generateLineData(
         distribution = std::normal_distribution<double>(0, noiseVar);
     }
 
-    int pointNumber = 50;
-    int outlierNumber = (int)(pointNumber*outliersRatio);
+    int nbPts = 20;
+    int outlierIdx = (int)(nbPts*outliersRatio);
 
-    for (int i = 0; i < pointNumber; i++)
+    x.resize(nbPts);
+    y.resize(nbPts);
+
+    for (int i = 0; i < nbPts; i++)
     {
-        double xnoise = addNoise ? distribution(generator) : 0.0;
-        double ynoise = addNoise ? distribution(generator) : 0.0;
-        x.push_back((double)i);
-        y.push_back(k * x[i] + b);
+        x[i] = (double)i;
+        y[i] = (k * x[i] + b);
 
-        if(i < outlierNumber)
+        if(i < outlierIdx)
         {
+            double xnoise = addNoise ? distribution(generator) : 0.0;
+            double ynoise = addNoise ? distribution(generator) : 0.0;
             x[i] += xnoise;
             y[i] += ynoise;
         }
@@ -186,7 +189,7 @@ TEST(LineFitting, noiseCaseMSAC)
     std::vector<double> y;
     double k = 1.0;
     double b = 0.0;
-    double noise = 0.0001;
+    double noise = 0.5;
     double outliersRatio = 0.2;
     generateLineData(k, b, noise, outliersRatio, x, y);
 
@@ -196,7 +199,7 @@ TEST(LineFitting, noiseCaseMSAC)
 
     // Solve
     robest::MSAC solver;
-    solver.solve(lineFitting);
+    solver.solve(lineFitting, 0.1, 1000);
 
     // Get result
     double res_k, res_b;

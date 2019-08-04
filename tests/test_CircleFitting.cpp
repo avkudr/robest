@@ -21,16 +21,16 @@ void generateCircleData(
         distribution = std::normal_distribution<double>(0,noiseVar);
     }
 
-    int pointNumber = 50;
-    int outlierNumber = (int)(pointNumber*outliersRatio);
+    int nbPts = 50;
+    int outlierIdx = (int)(nbPts*outliersRatio);
 
-    for(int i = 0 ; i < pointNumber ; i += 1){
+    for(double i = 0 ; i < nbPts ; i += 2.0 * 3.1415 / nbPts){
         double xnoise = addNoise ? distribution(generator) : 0;
         double ynoise = addNoise ? distribution(generator) : 0;
-        x.push_back(r*cos((double)i*(0.12566)) + cx); //cx
-        y.push_back(r*sin((double)i*(0.12566)) + cy); //cy
+        x.push_back(r*cos((double)i) + cx); //cx
+        y.push_back(r*sin((double)i) + cy); //cy
 
-        if(i < outlierNumber)
+        if(i < outlierIdx)
         {
             x[i] += xnoise;
             y[i] += ynoise;
@@ -102,7 +102,7 @@ TEST(CircleFitting, smallNoise)
     double cx = 3.552356; // circle center C:(cx,cy)
     double cy = 1.58452;
     double radius = 13.2548; //circle radius
-    double noiseVar = 0.001;
+    double noiseVar = 0.2;
     double outliersRatio = 0.3;
 
     generateCircleData(cx,cy,radius,noiseVar,outliersRatio,x,y);
@@ -111,8 +111,7 @@ TEST(CircleFitting, smallNoise)
     circleFitting->setData(x,y);
 
     robest::LMedS solver;
-    auto nbIter = solver.calculateIterationsNb(circleFitting->getNbMinSamples(),0.99,(1. - outliersRatio));
-    solver.solve(circleFitting,0.1,nbIter);
+    solver.solve(circleFitting,0.01);
 
     double res_cx,res_cy,res_r;
     circleFitting->getResult(res_cx,res_cy,res_r);
