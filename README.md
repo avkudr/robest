@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/47d76e078e184a958591b9e2dc0b04d2)](https://app.codacy.com/manual/avkudr/robest?utm_source=github.com&utm_medium=referral&utm_content=avkudr/robest&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/avkudr/robest.svg?branch=master)](https://travis-ci.org/avkudr/robest)
 [![Coverage Status](https://coveralls.io/repos/github/avkudr/robest/badge.svg?branch=master)](https://coveralls.io/github/avkudr/robest?branch=master)
 
