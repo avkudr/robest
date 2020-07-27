@@ -8,7 +8,7 @@ C++ library of robust estimators (RANSAC, LMedS, etc).
 
 ### Tutorial
 
-is finally availabre [here!](https://robest.readthedocs.io/en/latest/index.html)
+is finally available [here!](https://robest.readthedocs.io/en/latest/index.html)
 
 ### Running tests
 
